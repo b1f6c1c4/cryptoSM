@@ -85,17 +85,17 @@ body {
       font-family: 'Poiret One', sans-serif;
       position: absolute;
       left: 6vmin;
-      bottom: 8vmin; 
+      bottom: 8vmin;
       user-select: none;
       h1 {
         font-size: 22vmin;
         font-weight: bold;
-        margin: 0;
+        margin: -2vmin 0 -2.8vmin 0;
       }
       h2 {
         font-size: 6.2vmin;
         margin: 0;
-        margin-top: -3vmin;
+        letter-spacing: 10px;
       }
     }
     >.privacy-notice {

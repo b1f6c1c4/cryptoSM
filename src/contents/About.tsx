@@ -14,8 +14,8 @@ class AboutUW extends React.PureComponent {
             { t('lab.sm.about.openSource.link') + ': ' }
             <a
               target='_blank'
-              href='https://github.com/SCLeoX/sm-contract'
-              children='https://github.com/SCLeoX/sm-contract'
+              href='https://github.com/b1f6c1c4/cryptoSM'
+              children='https://github.com/b1f6c1c4/cryptoSM'
               rel='noopener'
             />
           </p>

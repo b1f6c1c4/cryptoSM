@@ -10,8 +10,8 @@ import { Header } from './Header';
 
 const Title = () => (
   <div className='title-container'>
+    <h2>crypto</h2>
     <h1>SM</h1>
-    <h2>CONTRACT</h2>
   </div>
 );
 const PrivacyNotice = () => {

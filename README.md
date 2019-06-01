@@ -1,4 +1,7 @@
-# SM Contract
+# cryptoSM
+
+> 本项目基于 [SM Contract](https://github.com/SCLeoX/sm-contract) 开发。
+
 ## 前言
 > 表面上来看，S 可以肆意对 M 做任何自己喜欢的事情，实际上，是 S 将 M 希望的事情，给予 M。如果 M 被对方胡乱的对待，那样叧能称作单纯的虐待吧。
 >
@@ -8,13 +11,17 @@
 >
 > <div align="right">——《我的身体，我的心》</div>
 
-由于 SM 玩法众多，主奴之间需要经过长时间的沟通才能弄明白双方对什么类型的 play 感兴趣。为了简化这个过程，SM Contract 诞生了。
+由于 SM 玩法众多，主奴之间需要经过长时间的沟通才能弄明白双方对什么类型的 play 感兴趣。为了简化这个过程，SM Contract 诞生了。而 cryptoSM 则给 SM Contract 添加了编绎脚本和基于乱码电路的隐私对比功能，是 SM Contract 的升级版本。
 
-SM Contract 是一份专为 SM 爱好者设计的调查表，涵盖了大量在 play 之前主奴之间应该沟通好的项目。填写完成后，您可以使用「导出数据」功能将您填写的信息转换为一个 base64 字符串并发送给您的搭档，并由您的搭档使用「对比」功能来生成一份直观的对比表格。当然，您也可以要求您的搭档发送其填写的信息，并由您来生成这份表格。
+您填写的所有信息都会被自动保存到您的浏览器中。没有任何信息被上传至 SM Contract 服务器或 cryptoSM 服务器。
 
-您填写的所有信息都会被自动保存到您的浏览器中。没有任何信息被上传至 SM Contract 服务器。
+[立刻开始填写](https://cryptosm.netlify.com/)
 
-[立刻开始填写](https://www.minegeck.net/lab/sm)
+## cryptoSM 的新特性
+
+- cryptoSM 开源了从项目源码、编绎脚本、持续集成、持续发布等整套项目文件，而 SM Contract 项目只有源码开源，构建工具依然是闭源的。
+- cryptoSM 采用第三方静态托管服务，服务器由第三方运营，并采用全球 CDN 加速，访问速度更快
+- cryptoSM 添加了基于[乱码电路](https://en.wikipedia.org/wiki/Garbled_circuit)的隐私对比功能，用户可以在不直接告诉对方自己 SM 偏好的情况下直接对比出哪些 play 双方都喜欢。原版 SM Contract 必须由一方将自己全部数据发送给另一方，有极大的隐私泄露风险。
 
 ## 贡献
 如果搞不懂的话就发 Issue 我来改。

@@ -16,7 +16,7 @@ class HeaderUW extends React.PureComponent<IHeaderProps> {
       <div className='header-container'>
         <div className='header'>
           <span className='clickable' onClick={ this.props.lowerCover }>
-            SM Contract
+            cryptoSM
           </span>
           <span>
             { ' · ' + getContentTitle(t, this.props.subtitle) }
