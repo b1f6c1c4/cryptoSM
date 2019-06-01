@@ -1,8 +1,9 @@
 import { Card } from '../components/Card';
 import { SimpleFormat } from '../components/SimpleFormat';
 import * as React from 'react';
+import { withTranslation } from 'react-i18next';
 
-export class About extends React.PureComponent {
+class AboutUW extends React.PureComponent {
   public render() {
     const t = this.props.t;
     return (
@@ -28,3 +29,5 @@ export class About extends React.PureComponent {
     );
   }
 }
+
+export const About = withTranslation()(AboutUW);

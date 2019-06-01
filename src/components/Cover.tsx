@@ -3,6 +3,7 @@ import { getContent } from '../contents/Content';
 import { ContentType } from '../contents/ContentType';
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { withTranslation, useTranslation } from 'react-i18next';
 import { IRootState } from '../RootState';
 import { Button } from './Button';
 import { Header } from './Header';
@@ -13,12 +14,15 @@ const Title = () => (
     <h2>CONTRACT</h2>
   </div>
 );
-const PrivacyNotice = (t) => (
-  <p
-    className='privacy-notice'
-    children={t('lab.sm.landing.privacyNotice')}
-  />
-);
+const PrivacyNotice = () => {
+  const { t } = useTranslation();
+  return (
+    <p
+      className='privacy-notice'
+      children={t('lab.sm.landing.privacyNotice')}
+    />
+  );
+};
 interface IButtonPanelProps {
   readonly setContent: (content: ContentType) => IActionSetContent;
 }
@@ -85,14 +89,14 @@ class ButtonPanelUW extends React.PureComponent<IButtonPanelProps> {
     );
   }
 }
-const ButtonPanel = connect(null, {
+const ButtonPanel = withTranslation()(connect(null, {
   setContent: createSetContentAction,
-})(ButtonPanelUW);
+})(ButtonPanelUW));
 const Landing = (t) => (
   <div className='landing'>
     <Header/>
     <Title/>
-    <PrivacyNotice t={t}/>
+    <PrivacyNotice/>
     <ButtonPanel/>
   </div>
 );
@@ -117,7 +121,7 @@ class CoverUW extends React.Component<ICoverProps> {
   }
 }
 
-export const Cover = connect((state: IRootState) => ({
+export const Cover = withTranslation()(connect((state: IRootState) => ({
   lifted: !state.currentView.cover,
   content: state.currentView.content,
-}))(CoverUW);
+}))(CoverUW));

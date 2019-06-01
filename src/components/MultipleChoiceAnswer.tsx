@@ -3,6 +3,7 @@ import { createSetAnswerAction, IActionSetAnswer, MCAnswer } from '../actions/an
 import { categories, ICategory, IMultipleChoiceQuestion } from '../data/categories';
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import { IRootState } from '../RootState';
 
 interface IOneChoiceProps {
@@ -133,7 +134,7 @@ class MultipleChoiceAnswerUW extends React.PureComponent<
   }
 }
 
-export const MultipleChoiceAnswer = connect((
+export const MultipleChoiceAnswer = withTranslation()(connect((
   state: IRootState,
   ownProps: IMultipleChoiceAnswerOwnProps,
 ) => ({
@@ -144,4 +145,4 @@ export const MultipleChoiceAnswer = connect((
   ),
 }), {
   setAnswer: createSetAnswerAction,
-})(MultipleChoiceAnswerUW);
+})(MultipleChoiceAnswerUW));

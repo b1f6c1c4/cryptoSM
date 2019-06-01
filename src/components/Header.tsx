@@ -2,6 +2,7 @@ import { createLowerCoverAction } from '../actions/currentView';
 import { getContentTitle } from '../contents/ContentType';
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import { IRootState } from '../RootState';
 
 interface IHeaderProps {
@@ -18,17 +19,17 @@ class HeaderUW extends React.PureComponent<IHeaderProps> {
             SM Contract
           </span>
           <span>
-            { ' · ' + getContentTitle(t, subtitle) }
+            { ' · ' + getContentTitle(t, this.props.subtitle) }
           </span>
         </div>
       </div>
     );
   }
 }
-export const Header = connect((
+export const Header = withTranslation()(connect((
   state: IRootState,
 ) => ({
   subtitle: state.currentView.content,
 }), {
   lowerCover: createLowerCoverAction,
-})(HeaderUW);
+})(HeaderUW));

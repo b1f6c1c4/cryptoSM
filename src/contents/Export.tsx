@@ -1,8 +1,9 @@
 import { Card } from '../components/Card';
 import { SimpleFormat } from '../components/SimpleFormat';
 import * as React from 'react';
+import { withTranslation } from 'react-i18next';
 
-export class Export extends React.PureComponent {
+class ExportUW extends React.PureComponent {
   private codeRef: HTMLElement;
   private updateRef = (ref: HTMLElement | null) => {
     if (ref !== null) {
@@ -39,3 +40,5 @@ export class Export extends React.PureComponent {
     );
   }
 }
+
+export const Export = withTranslation()(ExportUW);

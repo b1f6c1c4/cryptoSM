@@ -14,14 +14,16 @@ import { HardcorenessMetrics, QuestionType } from '../data/Enums';
 import * as React from 'react';
 import { Collapse } from 'react-collapse';
 import { connect } from 'react-redux';
+import { withTranslation, useTranslation } from 'react-i18next';
 import { IAnswersState } from '../reducers/answers';
 import { IRootState } from '../RootState';
 
 interface IHardcorenessMeterProps {
   readonly level: HardcorenessMetrics;
 }
-const HardcorenessMeter = ({ level }: IHardcorenessMeterProps) => (
-  level === HardcorenessMetrics.UNAVAILABLE
+const HardcorenessMeter = ({ level }: IHardcorenessMeterProps) => {
+  const { t } = useTranslation();
+  return level === HardcorenessMetrics.UNAVAILABLE
     ? null
     : <span
       className='hardcoreness-meter'
@@ -43,7 +45,7 @@ const HardcorenessMeter = ({ level }: IHardcorenessMeterProps) => (
             ? t('lab.sm.profile.hardcoreness.mid')
             : t('lab.sm.profile.hardcoreness.ext') })
     </span>
-);
+};
 
 interface IQuestionOwnProps {
   readonly categoryIndex: number;
@@ -230,7 +232,7 @@ export function getNonBianswerQuestionDisplayInfo(
   }
   return true;
 }
-const Question = connect((
+const Question = withTranslation()(connect((
   state: IRootState,
   ownProps: IQuestionOwnProps,
 ): {
@@ -259,13 +261,13 @@ const Question = connect((
       ),
     };
   }
-})(QuestionUW);
+})(QuestionUW));
 
 interface ICategoryProps {
   readonly categoryIndex: number;
   readonly category: ICategory;
 }
-class Category extends React.PureComponent<ICategoryProps> {
+class CategoryUW extends React.PureComponent<ICategoryProps> {
   public render() {
     const t = this.props.t; // TODO
     const category = this.props.category;
@@ -295,7 +297,9 @@ class Category extends React.PureComponent<ICategoryProps> {
   }
 }
 
-export class Profile extends React.PureComponent {
+const Category = withTranslation()(CategoryUW);
+
+class ProfileUW extends React.PureComponent {
   public render() {
     const t = this.props.t;
     return (
@@ -336,3 +340,5 @@ export class Profile extends React.PureComponent {
     );
   }
 }
+
+export const Profile = withTranslation()(ProfileUW);

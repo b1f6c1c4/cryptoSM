@@ -1,3 +1,4 @@
+import { withTranslation } from 'react-i18next';
 import { accessAnswerById } from '../AccessAnswer';
 import {
   getBianswerQuestionDisplayInfo,
@@ -20,7 +21,7 @@ interface IComparisonTableProps {
 interface IComparisonTableState {
   readonly showAll: boolean;
 }
-export class ComparisonTable extends React.PureComponent<
+class ComparisonTableUW extends React.PureComponent<
   IComparisonTableProps,
   IComparisonTableState
 > {
@@ -182,3 +183,5 @@ export class ComparisonTable extends React.PureComponent<
     );
   }
 }
+
+export const ComparisonTable = withTranslation()(ComparisonTableUW);

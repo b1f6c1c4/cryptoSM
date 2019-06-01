@@ -5,6 +5,7 @@ import { LinkButton } from '../components/LinkButton';
 import { SimpleFormat } from '../components/SimpleFormat';
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import { decode } from '../persistence';
 import { IAnswersState } from '../reducers/answers';
 
@@ -95,11 +96,11 @@ class ImporterUW extends React.PureComponent<IImporterProps, IImporterState> {
   }
 }
 
-const Importer = connect(null, {
+const Importer = withTranslation()(connect(null, {
   replaceAnswers: createReplaceAnswersAction,
-})(ImporterUW);
+})(ImporterUW));
 
-export class Import extends React.PureComponent {
+class ImportUW extends React.PureComponent {
   public render() {
     const t = this.props.t;
     return (
@@ -113,3 +114,5 @@ export class Import extends React.PureComponent {
     );
   }
 }
+
+export const Import = withTranslation()(ImportUW);

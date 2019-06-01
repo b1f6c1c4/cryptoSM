@@ -4,12 +4,13 @@ import {
   createStartCompareAction,
 } from '../actions/compare';
 import { Card } from '../components/Card';
-import { ComparisonTable } from '../components/ComparisonTable';
+import ComparisonTable from '../components/ComparisonTable';
 import { InputField } from '../components/InputField';
 import { LinkButton } from '../components/LinkButton';
 import { SimpleFormat } from '../components/SimpleFormat';
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import { decode } from '../persistence';
 import { IAnswersState } from '../reducers/answers';
 import { IRootState } from '../RootState';
@@ -144,8 +145,8 @@ class CompareUW extends React.PureComponent<ICompareProps> {
     );
   }
 }
-export const Compare = connect((state: IRootState) => ({
+export const Compare = withTranslation()(connect((state: IRootState) => ({
   comparing: state.compare.comparing,
 }), {
   clearCompare: createClearCompareAction,
-})(CompareUW);
+})(CompareUW));
