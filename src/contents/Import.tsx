@@ -22,7 +22,7 @@ class ImporterUW extends React.PureComponent<IImporterProps, IImporterState> {
     super(props);
     this.state = {
       value: '',
-      submitText: '@{lab.sm.import.import}',
+      submitText: t('lab.sm.import.import'),
       hint: null,
       hintColor: 'black',
     };
@@ -33,7 +33,7 @@ class ImporterUW extends React.PureComponent<IImporterProps, IImporterState> {
   private changeBackTimer: number | null = null;
   private changeBack = () => {
     this.setState({
-      submitText: '@{lab.sm.import.import}',
+      submitText: t('lab.sm.import.import'),
     });
     if (this.changeBackTimer !== null) {
       clearTimeout(this.changeBackTimer);
@@ -44,7 +44,7 @@ class ImporterUW extends React.PureComponent<IImporterProps, IImporterState> {
     event.preventDefault();
     if (this.changeBackTimer === null) {
       this.setState({
-        submitText: '@{lab.sm.import.confirm}',
+        submitText: t('lab.sm.import.confirm'),
         hint: null,
       });
       this.changeBackTimer = window.setTimeout(this.changeBack, 2000);
@@ -58,12 +58,12 @@ class ImporterUW extends React.PureComponent<IImporterProps, IImporterState> {
       }
       if (result === null) {
         this.setState({
-          hint: '@{lab.sm.import.failed}',
+          hint: t('lab.sm.import.failed'),
           hintColor: 'red',
         });
       } else {
         this.setState({
-          hint: '@{lab.sm.import.successful}',
+          hint: t('lab.sm.import.successful'),
           hintColor: 'green',
         });
         this.props.replaceAnswers(result);
@@ -76,10 +76,11 @@ class ImporterUW extends React.PureComponent<IImporterProps, IImporterState> {
     }
   }
   public render() {
+    const t = this.props.t;
     return (
       <div>
         <InputField
-          label='@{lab.sm.import.label}'
+          label={t('lab.sm.import.label')}
           onChange={ this.onChange }
           value={ this.state.value }
         />
@@ -100,11 +101,12 @@ const Importer = connect(null, {
 
 export class Import extends React.PureComponent {
   public render() {
+    const t = this.props.t;
     return (
       <div className='content import'>
         <Card>
-          <h1>{ '@{lab.sm.import.title}' }</h1>
-          <SimpleFormat>{ '@{lab.sm.import.desc}' }</SimpleFormat>
+          <h1>{ t('lab.sm.import.title') }</h1>
+          <SimpleFormat>{ t('lab.sm.import.desc') }</SimpleFormat>
           <Importer/>
         </Card>
       </div>

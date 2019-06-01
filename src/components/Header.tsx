@@ -10,6 +10,7 @@ interface IHeaderProps {
 }
 class HeaderUW extends React.PureComponent<IHeaderProps> {
   public render() {
+    const t = this.props.t;
     return (
       <div className='header-container'>
         <div className='header'>
@@ -17,7 +18,7 @@ class HeaderUW extends React.PureComponent<IHeaderProps> {
             SM Contract
           </span>
           <span>
-            { ' · ' + this.props.subtitle }
+            { ' · ' + getContentTitle(t, subtitle) }
           </span>
         </div>
       </div>
@@ -27,7 +28,7 @@ class HeaderUW extends React.PureComponent<IHeaderProps> {
 export const Header = connect((
   state: IRootState,
 ) => ({
-  subtitle: getContentTitle(state.currentView.content),
+  subtitle: state.currentView.content,
 }), {
   lowerCover: createLowerCoverAction,
 })(HeaderUW);

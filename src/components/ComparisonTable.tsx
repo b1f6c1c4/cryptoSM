@@ -48,11 +48,11 @@ export class ComparisonTable extends React.PureComponent<
     if (schrodinger) {
       return <td>{ schrodinger }</td>;
     } else if (schrodinger === null) {
-      return <td className='empty'>{ '< @{lab.sm.compare.table.empty} >' }</td>;
+      return <td className='empty'>{ '< ' + t('lab.sm.compare.table.empty') + ' >' }</td>;
     } else {
       return (
         <td className='unavailable'>
-          { '< @{lab.sm.compare.table.unavailable} >' }
+          { '< ' + t('lab.sm.compare.table.unavailable') + ' >' }
         </td>
       );
     }
@@ -155,22 +155,23 @@ export class ComparisonTable extends React.PureComponent<
     return results;
   }
   public render() {
+    const t = this.props.t;
     return (
       <React.Fragment>
         <LinkButton
           children={
             this.state.showAll
-              ? '@{lab.sm.compare.table.switchToShowAvailable}'
-              : '@{lab.sm.compare.table.switchToShowAll}'
+              ? t('lab.sm.compare.table.switchToShowAvailable')
+              : t('lab.sm.compare.table.switchToShowAll')
           }
           onClick={ this.onClickSwitchShowMode }
         />
         <table>
           <thead>
             <tr>
-              <th>{ '@{lab.sm.compare.table.item}' }</th>
-              <th>{ '@{lab.sm.compare.table.sChoice}' }</th>
-              <th>{ '@{lab.sm.compare.table.mChoice}' }</th>
+              <th>{ t('lab.sm.compare.table.item') }</th>
+              <th>{ t('lab.sm.compare.table.sChoice') }</th>
+              <th>{ t('lab.sm.compare.table.mChoice') }</th>
             </tr>
           </thead>
           <tbody>

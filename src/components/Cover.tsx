@@ -13,10 +13,10 @@ const Title = () => (
     <h2>CONTRACT</h2>
   </div>
 );
-const PrivacyNotice = () => (
+const PrivacyNotice = (t) => (
   <p
     className='privacy-notice'
-    children='@{lab.sm.landing.privacyNotice}'
+    children={t('lab.sm.landing.privacyNotice')}
   />
 );
 interface IButtonPanelProps {
@@ -42,18 +42,19 @@ class ButtonPanelUW extends React.PureComponent<IButtonPanelProps> {
     this.props.setContent(ContentType.ABOUT);
   }
   public render() {
+    const t = this.props.t;
     return (
       <div className='button-panel'>
         <Button
           class='start'
           icon='edit'
-          text='@{lab.sm.landing.start}'
+          text={t('lab.sm.landing.start')}
           onClick={ this.onClickStart }
         />
         <Button
           class='compare'
           icon='compare'
-          text='@{lab.sm.landing.compare}'
+          text={t('lab.sm.landing.compare')}
           onClick={ this.onClickCompare }
         />
         <Button
@@ -65,19 +66,19 @@ class ButtonPanelUW extends React.PureComponent<IButtonPanelProps> {
         <Button
           class='import'
           icon='file_download'
-          text='@{lab.sm.landing.import}'
+          text={t('lab.sm.landing.import')}
           onClick={ this.onClickImport }
         />
         <Button
           class='export'
           icon='file_upload'
-          text='@{lab.sm.landing.export}'
+          text={t('lab.sm.landing.export')}
           onClick={ this.onClickExport }
         />
         <Button
           class='about'
           icon='info'
-          text='@{lab.sm.landing.about}'
+          text={t('lab.sm.landing.about')}
           onClick={ this.onClickAbout }
         />
       </div>
@@ -87,11 +88,11 @@ class ButtonPanelUW extends React.PureComponent<IButtonPanelProps> {
 const ButtonPanel = connect(null, {
   setContent: createSetContentAction,
 })(ButtonPanelUW);
-const Landing = () => (
+const Landing = (t) => (
   <div className='landing'>
     <Header/>
     <Title/>
-    <PrivacyNotice/>
+    <PrivacyNotice t={t}/>
     <ButtonPanel/>
   </div>
 );
@@ -103,12 +104,13 @@ interface ICoverProps {
 
 class CoverUW extends React.Component<ICoverProps> {
   public render() {
+    const t = this.props.t;
     return (
       <div>
         <div className='content-padding'/>
         { getContent(this.props.content) }
         <div className={ 'cover' + (this.props.lifted ? ' lifted' : '') }>
-          <Landing/>
+          <Landing t={t} />
         </div>
       </div>
     );

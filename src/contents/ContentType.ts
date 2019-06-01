@@ -7,19 +7,19 @@ export enum ContentType {
   ABOUT,
 }
 
-export function getContentTitle(type: ContentType): string {
+export function getContentTitle(t: any, type: ContentType): string {
   switch (type) {
     case ContentType.PROFILE:
-      return '@{lab.sm.contentTitle.profile}';
+      return t('lab.sm.contentTitle.profile');
     case ContentType.COMPARE:
-      return '@{lab.sm.contentTitle.compare}';
+      return t('lab.sm.contentTitle.compare');
     case ContentType.LANGUAGE:
       return 'Language Selection';
     case ContentType.IMPORT:
-      return '@{lab.sm.contentTitle.import}';
+      return t('lab.sm.contentTitle.import');
     case ContentType.EXPORT:
-      return '@{lab.sm.contentTitle.export}';
+      return t('lab.sm.contentTitle.export');
     case ContentType.ABOUT:
-      return '@{lab.sm.contentTitle.about}';
+      return t('lab.sm.contentTitle.about');
   }
 }

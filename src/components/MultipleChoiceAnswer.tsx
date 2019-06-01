@@ -91,6 +91,7 @@ class MultipleChoiceAnswerUW extends React.PureComponent<
     );
   }
   public render() {
+    const t = this.props.t;
     const choices = this.props.question.choices;
     const showCol0 = !this.props.bianswer || this.props.showS;
     const showCol1 = this.props.bianswer && this.props.showM;
@@ -98,13 +99,13 @@ class MultipleChoiceAnswerUW extends React.PureComponent<
       <table onClick={ this.onClick }>
         <thead>
           <tr>
-            <th>{ '@{lab.sm.mcq.items}' }</th>
+            <th>{ t('lab.sm.mcq.items') }</th>
             { showCol0 && <th>
               { this.props.bianswer
-                ? '@{lab.sm.mcq.asS}'
+                ? t('lab.sm.mcq.asS')
                 : '' }
             </th> }
-            { showCol1 && <th>{ '@{lab.sm.mcq.asM}' }</th> }
+            { showCol1 && <th>{ t('lab.sm.mcq.asM') }</th> }
           </tr>
         </thead>
         <tbody>

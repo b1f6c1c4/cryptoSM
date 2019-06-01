@@ -36,12 +36,12 @@ const HardcorenessMeter = ({ level }: IHardcorenessMeterProps) => (
       }}
     >
       ({ level === HardcorenessMetrics.UNDETERMINED
-        ? '@{lab.sm.profile.hardcoreness.undet}'
+        ? t('lab.sm.profile.hardcoreness.undet')
         : level === HardcorenessMetrics.MILD
-          ? '@{lab.sm.profile.hardcoreness.mild}'
+          ? t('lab.sm.profile.hardcoreness.mild')
           : level === HardcorenessMetrics.MEDIUM
-            ? '@{lab.sm.profile.hardcoreness.mid}'
-            : '@{lab.sm.profile.hardcoreness.ext}' })
+            ? t('lab.sm.profile.hardcoreness.mid')
+            : t('lab.sm.profile.hardcoreness.ext') })
     </span>
 );
 
@@ -60,6 +60,7 @@ class QuestionUW extends React.PureComponent<IQuestionProps> {
   private lastShowS: boolean = true;
   private lastShowM: boolean = false;
   public render() {
+    const t = this.props.t;
     if (!this.props.folded) {
       this.lastShowS = this.props.showS === true;
       this.lastShowM = this.props.showM === true;
@@ -69,11 +70,11 @@ class QuestionUW extends React.PureComponent<IQuestionProps> {
       <Collapse isOpened={ !this.props.folded }>
         <div className='question'>
           <p className='info'>
-            { '@{lab.sm.profile.id}' }
+            { t('lab.sm.profile.id') }
             <b>{ 'C' + this.props.category.categoryId + 'Q' +
               question.questionId }</b>
             <br/>
-            { '@{lab.sm.profile.index}' }
+            { t('lab.sm.profile.index') }
             <b>{ 'C' + this.props.categoryIndex + 'Q' +
               this.props.questionIndex }</b>
           </p>
@@ -266,6 +267,7 @@ interface ICategoryProps {
 }
 class Category extends React.PureComponent<ICategoryProps> {
   public render() {
+    const t = this.props.t; // TODO
     const category = this.props.category;
     return (
       <Card>
@@ -295,12 +297,13 @@ class Category extends React.PureComponent<ICategoryProps> {
 
 export class Profile extends React.PureComponent {
   public render() {
+    const t = this.props.t;
     return (
       <div className='content profile'>
         <Card>
-          <h1>{ '@{lab.sm.profile.about.title}' }</h1>
+          <h1>{ t('lab.sm.profile.about.title') }</h1>
           <SimpleFormat>
-            { '@{lab.sm.profile.about.desc}' }
+            { t('lab.sm.profile.about.desc') }
           </SimpleFormat>
         </Card>
         { categories.map((
@@ -312,21 +315,21 @@ export class Profile extends React.PureComponent {
           category={ category }
         />) }
         <Card>
-          <h1>{ '@{lab.sm.profile.finish.title}' }</h1>
+          <h1>{ t('lab.sm.profile.finish.title') }</h1>
           <SimpleFormat>
-            { '@{lab.sm.profile.finish.desc.before}' }
+            { t('lab.sm.profile.finish.desc.before') }
           </SimpleFormat>
           <p>
-            { '@{lab.sm.profile.finish.group.desc.before}' }
+            { t('lab.sm.profile.finish.group.desc.before') }
             <a
               target='_blank'
-              href='@{lab.sm.profile.finish.group.link}'
-              children='@{lab.sm.profile.finish.group.link}'
+              href={t('lab.sm.profile.finish.group.link')}
+              children={t('lab.sm.profile.finish.group.link')}
             />
-            { '@{lab.sm.profile.finish.group.desc.after}' }
+            { t('lab.sm.profile.finish.group.desc.after') }
           </p>
           <SimpleFormat>
-            { '@{lab.sm.profile.finish.desc.after}' }
+            { t('lab.sm.profile.finish.desc.after') }
           </SimpleFormat>
         </Card>
       </div>

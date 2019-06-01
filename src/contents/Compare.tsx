@@ -63,7 +63,7 @@ class CompareFormUW extends React.Component<
         : this.props.currentAnswers;
     } catch (e) {
       this.setState({
-        error: '@{lab.sm.compare.sError}',
+        error: t('lab.sm.compare.sError'),
       });
       return;
     }
@@ -73,27 +73,28 @@ class CompareFormUW extends React.Component<
         : this.props.currentAnswers;
     } catch (e) {
       this.setState({
-        error: '@{lab.sm.compare.mError}',
+        error: t('lab.sm.compare.mError'),
       });
       return;
     }
     this.props.startCompare(sAnswers, mAnswers);
   }
   public render() {
+    const t = this.props.t;
     return (
       <div>
         <InputField
-          label='@{lab.sm.compare.label.s}'
+          label={t('lab.sm.compare.label.s')}
           value={ this.props.formSValue }
           onChange={ this.onSFormValueChange }
         />
         <InputField
-          label='@{lab.sm.compare.label.m}'
+          label={t('lab.sm.compare.label.m')}
           value={ this.props.formMValue }
           onChange={ this.onMFormValueChange }
         />
         <LinkButton
-          children='@{lab.sm.compare.start}'
+          children={t('lab.sm.compare.start')}
           onClick={ this.onClickCompare }
         />
         { this.state.error && <p className='error'>
@@ -124,14 +125,14 @@ class CompareUW extends React.PureComponent<ICompareProps> {
     return (
       <div className='content compare'>
         <Card>
-          <h1>{ '@{lab.sm.compare.title}' }</h1>
-          <SimpleFormat>{ '@{lab.sm.compare.desc}' }</SimpleFormat>
+          <h1>{ t('lab.sm.compare.title') }</h1>
+          <SimpleFormat>{ t('lab.sm.compare.desc') }</SimpleFormat>
           <CompareForm/>
         </Card>
         { this.props.comparing !== null && <Card>
-          <h1>{ '@{lab.sm.compare.table.title}' }</h1>
+          <h1>{ t('lab.sm.compare.table.title') }</h1>
           <LinkButton
-            children='@{lab.sm.compare.table.clear}'
+            children={t('lab.sm.compare.table.clear')}
             onClick={ this.props.clearCompare }
           />
           <ComparisonTable

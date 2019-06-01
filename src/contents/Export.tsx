@@ -22,11 +22,12 @@ export class Export extends React.PureComponent {
     this.clicked = true;
   }
   public render() {
+    const t = this.props.t;
     return (
       <div className='content export'>
         <Card>
-          <h1>{ '@{lab.sm.export.title}' }</h1>
-          <SimpleFormat>{ '@{lab.sm.export.desc}' }</SimpleFormat>
+          <h1>{ t('lab.sm.export.title') }</h1>
+          <SimpleFormat>{ t('lab.sm.export.desc') }</SimpleFormat>
           <code
             ref={ this.updateRef }
             onClick={ this.onClick }
