@@ -4,7 +4,7 @@ import {
   createStartCompareAction,
 } from '../actions/compare';
 import { Card } from '../components/Card';
-import ComparisonTable from '../components/ComparisonTable';
+import { ComparisonTable } from '../components/ComparisonTable';
 import { InputField } from '../components/InputField';
 import { LinkButton } from '../components/LinkButton';
 import { SimpleFormat } from '../components/SimpleFormat';
@@ -105,14 +105,14 @@ class CompareFormUW extends React.Component<
     );
   }
 }
-const CompareForm = connect((state: IRootState) => ({
+const CompareForm = withTranslation()(connect((state: IRootState) => ({
   formSValue: state.compare.form.s,
   formMValue: state.compare.form.m,
   currentAnswers: state.answers,
 }), {
   setCompareForm: createSetCompareFormAction,
   startCompare: createStartCompareAction,
-})(CompareFormUW);
+})(CompareFormUW));
 
 interface ICompareProps {
   readonly comparing: null | {
@@ -123,6 +123,7 @@ interface ICompareProps {
 }
 class CompareUW extends React.PureComponent<ICompareProps> {
   public render() {
+    const t = this.props.t;
     return (
       <div className='content compare'>
         <Card>

@@ -11,8 +11,6 @@ const resources = {
   zh_HK,
 };
 
-global.console.log(resources);
-
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)

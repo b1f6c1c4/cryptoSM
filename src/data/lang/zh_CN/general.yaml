@@ -6,7 +6,7 @@ lab.sm:
     import: 导入数据
     export: 导出数据
     about: 关于
-    privacyNotice: $
+    privacyNotice: >-
       SM Contract 仅使用 Cookie 来记录您使用的语言。您使用 SM Contract 时产生的所有数据
       仅会被保存在您的浏览器中。没有数据会被上传至 SM Contract 服务器。
   contentTitle:
@@ -21,7 +21,7 @@ lab.sm:
     index: 索引：
     about:
       title: 前言
-      desc: $
+      desc: >-
         i 表面上来看，S 可以肆意对 M 做任何自己喜欢的事情，实际上，是 S 将 M 希望的事情，给
         予 M。如果 M 被对方胡乱的对待，那样叧能称作单纯的虐待吧。
 
@@ -53,11 +53,11 @@ lab.sm:
     finish:
       title: 完成！
       desc:
-        before: $
+        before: >-
           恭喜！您已经将 SM Contract 填写完了！您可以点击左上角的「SM Contract」来回到首
           页并使用「导出数据」来导出您的数据并发送给您的搭档或者使用「对比」来和您搭档发来的
           数据进行对比。
-        after: $
+        after: >-
           见面之后请先确定好安全词，玩的时候也请务必注意安全。
 
           最后，预祝您玩的愉快！
@@ -83,7 +83,7 @@ lab.sm:
     sError: 对比失败，施虐者 (S) 数据格式错误
     start: 开始对比
     title: 对比
-    desc: $
+    desc: >-
       「对比」可以帮助您与您的搭档找到双方都感兴趣的项目。您的搭档需要通过「导出数据」来获得一
       个 base64 字符串并将其发送给您。您需要将收到的字符串填入您的搭档所充当的角色所对应的文
       本框内，然后将您要充当的角色所对应的文本框留空，最后点击「开始对比」来获得对比结果。
@@ -102,7 +102,7 @@ lab.sm:
       unavailable: 不可用
   export:
     title: 导出数据
-    desc: $
+    desc: >-
       SM Contract 会自动将您填写的信息保存到浏览器的 localStorage 中，于此同时，您所填写
       的信息已经被压缩到下面这个 base64 字符串中。您可以将其复制到任何地方进行保存，并在另一
       台电脑中使用「导入数据」功能导入。
@@ -116,6 +116,6 @@ lab.sm:
     label: 请将要导入的数据粘贴在这个输入框中
     successful: 导入成功
     title: 导入数据
-    desc: $
+    desc: >-
       您可以将之前使用「导出数据」获得的 base64 字符串导入。请注意，导入数据将会覆盖您目前填
       写的所有信息。此操作不可逆。

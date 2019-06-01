@@ -1,12 +1,12 @@
 Language: zh_CN
 lab.sm.data.c5:
   name: 性行为相关
-  description: $
+  description: >-
     「性行为相关」是指可与 SM 结合的常规性行为，包括但不限于阴道插入，口交等。这个部分涉及的项
     目在非 SM 的场合也会出现，所以不一定是 SM 玩法。
   q0:
     title: 对「性行为相关」的整体看法
-    description: $
+    description: >-
       请选择您对于性行为相关的整体看法。如果您选择除了「一票否决」之外的选项，您将会有机会对子
       项作出更细致的选择。
   q1:
@@ -14,7 +14,7 @@ lab.sm.data.c5:
     description: 将阴茎插入阴道。
   q2:
     title: 中出 (体内射精)
-    description: $
+    description: >-
       i 我们中出了个叛徒。
 
       >i ——《圣经》
@@ -26,14 +26,14 @@ lab.sm.data.c5:
     warning: 注意安全。
   q3:
     title: 肛交
-    description: $
+    description: >-
       i 「肛交」是指将勃起的阴茎与人类的肛门和/或直肠互相接合并彼此摩擦的过程，主要目的是为了
       令自身获得性快感。
 
       >i —— 维基百科
   q4:
     title: 口交
-    description: $
+    description: >-
       i 「口交」，是性行为的其中一种，从事者的口腔（包括嘴唇、舌、牙齿和喉咙）会与其伴侣的生殖
       器接触，并以此对其进行刺激。
 

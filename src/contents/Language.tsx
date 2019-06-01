@@ -1,26 +1,18 @@
+import { createLowerCoverAction } from '../actions/currentView';
 import { Card } from '../components/Card';
 import { LinkButton } from '../components/LinkButton';
 import * as React from 'react';
+import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 
 interface ILanguageOptionProps {
   readonly display: string;
   readonly name: string;
 }
-class LanguageOption extends React.PureComponent<ILanguageOptionProps> {
+class LanguageOptionUW extends React.PureComponent<ILanguageOptionProps> {
   public onClick: React.EventHandler<React.MouseEvent<any>> = event => {
-    event.preventDefault();
-    fetch('/api/selectLanguage', {
-      body: JSON.stringify({
-        language: this.props.name,
-      }),
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-    }).then(() => {
-      window.location.reload(true);
-    });
+    const i18n = this.props.i18n;
+    i18n.changeLanguage(this.props.name, () => { this.props.lowerCover(); });
   }
   public render() {
     return (
@@ -30,6 +22,10 @@ class LanguageOption extends React.PureComponent<ILanguageOptionProps> {
     );
   }
 }
+
+const LanguageOption = withTranslation()(connect(null, {
+  lowerCover: createLowerCoverAction,
+})(LanguageOptionUW);
 
 export class Language extends React.PureComponent {
   public render() {

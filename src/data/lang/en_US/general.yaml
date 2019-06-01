@@ -6,7 +6,7 @@ lab.sm:
     import: Import
     export: Export
     about: About
-    privacyNotice: $
+    privacyNotice: >-
       Translation not available
   contentTitle:
     profile: Profile
@@ -20,9 +20,9 @@ lab.sm:
     index: "Index:"
     about:
       title: Preface
-      desc: $
+      desc: >-
         Translation not available
     finish:
       title: Finished!
-      desc: $
+      desc: >-
         Translation not available

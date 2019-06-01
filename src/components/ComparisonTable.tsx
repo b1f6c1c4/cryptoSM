@@ -46,8 +46,9 @@ class ComparisonTableUW extends React.PureComponent<
     }
   }
   private convertSchrodingerToElement(schrodinger: string | null | undefined) {
+    const t = this.props.t;
     if (schrodinger) {
-      return <td>{ schrodinger }</td>;
+      return <td>{ t(schrodinger) }</td>;
     } else if (schrodinger === null) {
       return <td className='empty'>{ '< ' + t('lab.sm.compare.table.empty') + ' >' }</td>;
     } else {
@@ -59,6 +60,7 @@ class ComparisonTableUW extends React.PureComponent<
     }
   }
   private renderRows(): Array<React.ReactNode> {
+    const t = this.props.t;
     const sAnswers = this.props.s;
     const mAnswers = this.props.m;
     const results: Array<React.ReactNode> = [];
@@ -146,7 +148,7 @@ class ComparisonTableUW extends React.PureComponent<
           <tr key={ cid + ',' + qid } style={{
             backgroundColor: color,
           }}>
-            <td>{ question.title }</td>
+            <td>{ t(question.title) }</td>
             { sTd }
             { mTd }
           </tr>,
