@@ -1,13 +1,13 @@
 Language: zh_CN
-lab.sm.about
-  openSource
-    link  : 链接
-    title : 开源信息
+lab.sm.about:
+  openSource:
+    link: 链接
+    title: 开源信息
     desc: $
       SM Contract 在 GitHub 开源。如果要修改数据 (问题/描述文本) 请同时修改 data 文件夹
       内的 ts 文件和 data/lang 文件夹内对应的语言文件。如果搞不定，发个 issue 就可以了。
-  faq
-    title : 常见问题 (FAQ)
+  faq:
+    title: 常见问题 (FAQ)
     content: $
       ! SM Contract 会泄露/出售我的信息吗？
 

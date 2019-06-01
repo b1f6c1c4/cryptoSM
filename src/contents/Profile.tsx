@@ -81,16 +81,16 @@ class QuestionUW extends React.PureComponent<IQuestionProps> {
               this.props.questionIndex }</b>
           </p>
           <h2>
-            { question.title }
+            { t(question.title) }
             <HardcorenessMeter level={ question.hardcoreness }/>
           </h2>
           <div className='clear'/>
           { question.description && <SimpleFormat>
-            { question.description }
+            { t(question.description) }
           </SimpleFormat> }
           { question.warning && <SimpleFormat
             className='warning'
-            children={ question.warning }
+            children={ t(question.warning) }
           />}
           { question.type === QuestionType.MULTIPLE_CHOICE
             ? <MultipleChoiceAnswer
@@ -269,16 +269,16 @@ interface ICategoryProps {
 }
 class CategoryUW extends React.PureComponent<ICategoryProps> {
   public render() {
-    const t = this.props.t; // TODO
+    const t = this.props.t;
     const category = this.props.category;
     return (
       <Card>
         <h4>
-          { '@{lab.sm.profile.categoryIndexLabel,' + this.props.categoryIndex + '}' }
+          { t('lab.sm.profile.categoryIndexLabel', { id: this.props.categoryIndex }) }
         </h4>
-        <h1>{ category.name }</h1>
+        <h1>{ t(category.name) }</h1>
         { category.description && <SimpleFormat>
-          { category.description }
+          { t(category.description) }
         </SimpleFormat> }
         { category.questions.map((
           question: IQuestion,

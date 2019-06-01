@@ -1,23 +1,23 @@
 Language: zh_CN
-lab.sm.data.c7
+lab.sm.data.c7:
   name: 杂项
   description: 这里包含了无法被分到现有类别却又难以单独成为一个类别的项目。
-  q0
+  q0:
     title: 言语侮辱
     description: $
       「言语侮辱」是指施虐者 (S) 在对话时使用侮辱性语言来使受虐者 (M) 获得快感。
-  q1
+  q1:
     title: 强制高潮
     description: $
       「强制高潮」是指施虐者 (S) 在受虐者 (M) 被拘束的情况下使用手或工具刺激其生殖器来强迫其
       达到性高潮。
-  q2
+  q2:
     title: 露出 play
     description: $
       「露出 play」是指让处于特殊状态 (被捆绑，真空等) 的受虐者 (M) 暴露在公共区域来让其产生
       恐惧感/羞耻感。
     warning: 取决于尺度，此项目可能会违反您所处的国家的法律，进行前请先确认合法性。
-  q3
+  q3:
     title: 呼吸限制
     description: $
       「呼吸限制」是指施虐者 (S) 在短时间内限制或剥夺受虐者 (M) 的呼吸能力来使其产生恐惧感和

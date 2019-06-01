@@ -27,6 +27,7 @@
     "i18next-browser-languagedetector": "^3.0.1",
     "immutability-helper": "^3.0.0",
     "immutable": "^4.0.0-rc.12",
+    "lodash": "^4.17.11",
     "pako": "^1.0.6",
     "react": "^16.8.6",
     "react-collapse": "^4.0.3",

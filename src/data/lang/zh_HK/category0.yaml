@@ -1,10 +1,10 @@
 Language: zh_HK
-lab.sm.data.c0
+lab.sm.data.c0:
   name: 基本信息
   description: $
     「基本信息」將會詢問您一些基礎且通用性較高的問題。您在這個部分的回答將會幫助我們排
      除一些由於生理條件限制而無法進行的項目，以減少後續的問題數量。
-  q0
+  q0:
     title: 角色傾向
     description: $
       請選擇您在 SM play 中想充當的角色。如果您選擇了「均可」，您可以在許多後續問題中給出您處
@@ -12,21 +12,21 @@ lab.sm.data.c0
     a0: 施虐者 (S)
     a1: 受虐者 (M)
     a2: 均可
-  q1
+  q1:
     title: 生理性別
     description: 請選擇您的生理性別。您的生理性別會限制您所能進行的 play 類型。
-  q2
+  q2:
     title: 您有陰莖嗎？
-  q3
+  q3:
     title: 您能正常射精嗎？
-  q4
+  q4:
     title: 您有陰道嗎？
-  q5
+  q5:
     title: 您可以分泌乳汁嗎？
-  q6
+  q6:
     title: 心理性別
     description: 請選擇您在 SM play 中想被視為的性別。
-  q7
+  q7:
     title: 偏好稱呼
     description: 請填寫您在 SM play 中想被如何稱呼。
     label: 偏好稱呼

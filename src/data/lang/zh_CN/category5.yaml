@@ -1,18 +1,18 @@
 Language: zh_CN
-lab.sm.data.c5
+lab.sm.data.c5:
   name: 性行为相关
   description: $
     「性行为相关」是指可与 SM 结合的常规性行为，包括但不限于阴道插入，口交等。这个部分涉及的项
     目在非 SM 的场合也会出现，所以不一定是 SM 玩法。
-  q0
+  q0:
     title: 对「性行为相关」的整体看法
     description: $
       请选择您对于性行为相关的整体看法。如果您选择除了「一票否决」之外的选项，您将会有机会对子
       项作出更细致的选择。
-  q1
+  q1:
     title: 阴道插入
     description: 将阴茎插入阴道。
-  q2
+  q2:
     title: 中出 (体内射精)
     description: $
       i 我们中出了个叛徒。
@@ -24,14 +24,14 @@ lab.sm.data.c5
 
       >i —— 维基百科
     warning: 注意安全。
-  q3
+  q3:
     title: 肛交
     description: $
       i 「肛交」是指将勃起的阴茎与人类的肛门和/或直肠互相接合并彼此摩擦的过程，主要目的是为了
       令自身获得性快感。
 
       >i —— 维基百科
-  q4
+  q4:
     title: 口交
     description: $
       i 「口交」，是性行为的其中一种，从事者的口腔（包括嘴唇、舌、牙齿和喉咙）会与其伴侣的生殖
@@ -41,18 +41,18 @@ lab.sm.data.c5
 
       由于口交的发起者既可能是 S 又可能是 M，请先选择您对于口交的整体看法。如果您选择除了「一
       票否决」之外的选项，您将会有机会对各个配置作出更细致的选择。
-  q5
+  q5:
     title: 口交 (M 嘴 - S 阴茎)
     description: 由受虐者 (M) 舔/吮吸施虐者 (S) 的阴茎。
-  q6
+  q6:
     title: 强迫 M 吞精
     description: 施虐者 (S) 在受虐者 (M) 的嘴中射精后，强迫受虐者 (M) 将嘴中的精液吞下。
-  q7
+  q7:
     title: 口交 (S 嘴 - M 阴茎)
     description: 施虐者 (S) 舔/吮吸 受虐者 (M) 的阴茎。
-  q8
+  q8:
     title: 口交 (M 嘴 - S 阴道)
     description: 由受虐者 (M) 舔/吮吸施虐者 (S) 的阴道 (包括外阴，阴蒂等)。
-  q9
+  q9:
     title: 口交 (S 嘴 - M 阴道)
     description: 由施虐者 (S) 舔/吮吸受虐者 (M) 的阴道 (包括外阴，阴蒂等)。

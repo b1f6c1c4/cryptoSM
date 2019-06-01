@@ -23,7 +23,7 @@ class ImporterUW extends React.PureComponent<IImporterProps, IImporterState> {
     super(props);
     this.state = {
       value: '',
-      submitText: t('lab.sm.import.import'),
+      submitText: 'lab.sm.import.import',
       hint: null,
       hintColor: 'black',
     };
@@ -34,7 +34,7 @@ class ImporterUW extends React.PureComponent<IImporterProps, IImporterState> {
   private changeBackTimer: number | null = null;
   private changeBack = () => {
     this.setState({
-      submitText: t('lab.sm.import.import'),
+      submitText: 'lab.sm.import.import',
     });
     if (this.changeBackTimer !== null) {
       clearTimeout(this.changeBackTimer);
@@ -45,7 +45,7 @@ class ImporterUW extends React.PureComponent<IImporterProps, IImporterState> {
     event.preventDefault();
     if (this.changeBackTimer === null) {
       this.setState({
-        submitText: t('lab.sm.import.confirm'),
+        submitText: 'lab.sm.import.confirm',
         hint: null,
       });
       this.changeBackTimer = window.setTimeout(this.changeBack, 2000);
@@ -86,7 +86,7 @@ class ImporterUW extends React.PureComponent<IImporterProps, IImporterState> {
           value={ this.state.value }
         />
         <LinkButton onClick={ this.onClickSubmit }>
-          { this.state.submitText }
+          { t(this.state.submitText) }
         </LinkButton>
         { this.state.hint && <p style={{
           color: this.state.hintColor,

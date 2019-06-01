@@ -3,6 +3,7 @@ import { createSetAnswerAction, FBAnswer } from '../actions/answers';
 import { ICategory, IFillBlankQuestion } from '../data/categories';
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import { IRootState } from '../RootState';
 import { InputField } from './InputField';
 
@@ -46,13 +47,14 @@ class FillBlankAnswerUW extends React.PureComponent<
     ]);
   }
   public render() {
+    const t = this.props.t;
     const showCol0 = !this.props.bianswer || this.props.showS;
     const showCol1 = this.props.bianswer && this.props.showM;
     return (
       <div>
         { showCol0 && <InputField
           label={ this.props.bianswer
-            ? `@{lab.sm.fbq.asS,${ this.props.question.label }}`
+            ? t('lab.sm.fbq.asS', { q: t(this.props.question.label) })
             : this.props.question.label
           }
           value={
@@ -63,7 +65,7 @@ class FillBlankAnswerUW extends React.PureComponent<
           onChange={ this.onChange0 }
         /> }
         { showCol1 && <InputField
-          label={ `@{lab.sm.fbq.asM,${ this.props.question.label }}` }
+          label={ t('lab.sm.fbq.asM', { q: t(this.props.question.label) }) }
           value={ this.props.currentAnswer[1] }
           onChange={ this.onChange1 }
         /> }
@@ -72,7 +74,7 @@ class FillBlankAnswerUW extends React.PureComponent<
   }
 }
 
-export const FillBlankAnswer = connect((
+export const FillBlankAnswer = withTranslation()(connect((
   state: IRootState,
   ownProps: IFillBlankAnswerOwnProps,
 ) => ({
@@ -83,4 +85,4 @@ export const FillBlankAnswer = connect((
   ),
 }), {
   setAnswer: createSetAnswerAction,
-})(FillBlankAnswerUW);
+})(FillBlankAnswerUW));

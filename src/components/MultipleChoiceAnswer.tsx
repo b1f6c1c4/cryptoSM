@@ -112,7 +112,7 @@ class MultipleChoiceAnswerUW extends React.PureComponent<
         <tbody>
           { choices.map((choice, choiceIndex) => (
             <tr data-index={ String(choiceIndex) } key={ choiceIndex }>
-              <td data-type='all'>{ choice }</td>
+              <td data-type='all'>{ t(choice) }</td>
               { showCol0 && <td data-type='col0'>
                 <OneChoice selected={
                   Array.isArray(this.props.currentAnswer)
