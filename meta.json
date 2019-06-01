@@ -1,7 +1,0 @@
-[
-  {
-    "type": "website",
-    "source": "./src",
-    "target": "./sm"
-  }
-]
