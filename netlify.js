@@ -5,7 +5,7 @@ const path = require('path');
 const run = async (draft = false) => {
   const client = new NetlifyAPI(process.env.NETLIFYKEY);
   await client.deploy(
-    '', // TODO
+    '70420d35-bf02-4250-a71e-6065af7b2ca3',
     path.join(__dirname, './dist'),
     {
       draft,

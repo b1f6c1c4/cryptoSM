@@ -17,7 +17,7 @@ install:
   - npm ci
 
 script:
-  - docker run --name emscripten -v $PWD:/src trzeci/emscripten:sdk-incoming-64bit emmake make wasm
+  - docker run --name emscripten -v $PWD:/src trzeci/emscripten:sdk-incoming-64bit emmake make
   - npm run build
 
 after_success:

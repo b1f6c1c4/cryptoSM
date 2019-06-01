@@ -15,7 +15,7 @@
 
 您填写的所有信息都会被自动保存到您的浏览器中。没有任何信息被上传至 SM Contract 服务器或 cryptoSM 服务器。
 
-[立刻开始填写](https://cryptosm.netlify.com/)
+[立刻开始填写](https://crypto-sm.netlify.com/)
 
 ## cryptoSM 的新特性
 
