@@ -11,9 +11,9 @@ import {
   IQuestion,
 } from '../data/categories';
 import { HardcorenessMetrics, QuestionType } from '../data/Enums';
-import * as React from '../external/react';
-import { Collapse } from '../external/reactCollapse';
-import { connect } from '../external/reactRedux';
+import * as React from 'react';
+import { Collapse } from 'react-collapse';
+import { connect } from 'react-redux';
 import { IAnswersState } from '../reducers/answers';
 import { IRootState } from '../RootState';
 

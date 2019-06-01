@@ -1,7 +1,7 @@
 import { createLowerCoverAction } from '../actions/currentView';
 import { getContentTitle } from '../contents/ContentType';
-import * as React from '../external/react';
-import { connect } from '../external/reactRedux';
+import * as React from 'react';
+import { connect } from 'react-redux';
 import { IRootState } from '../RootState';
 
 interface IHeaderProps {

@@ -1,4 +1,4 @@
-import * as React from '../external/react';
+import * as React from 'react';
 
 interface IInputFieldProps {
   readonly label: string;

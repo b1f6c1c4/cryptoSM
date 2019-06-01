@@ -6,7 +6,7 @@ import {
   IActionSetCompareForm,
   IActionStartCompare,
 } from '../actions/compare';
-import update from '../external/immutabilityHelper';
+import update from 'immutability-helper';
 import { IAnswersState } from './answers';
 
 export interface ICompareState {

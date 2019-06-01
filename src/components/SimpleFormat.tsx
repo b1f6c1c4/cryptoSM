@@ -1,4 +1,4 @@
-import * as React from '../external/react';
+import * as React from 'react';
 
 const mapLineToElement = (className?: string) => (line: string, i: number) => {
   if (line.startsWith('/ ')) {

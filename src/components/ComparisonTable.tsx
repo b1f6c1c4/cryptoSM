@@ -9,7 +9,7 @@ import {
   IQuestion,
   QuestionType,
 } from '../data/categories';
-import * as React from '../external/react';
+import * as React from 'react';
 import { IAnswersState } from '../reducers/answers';
 import { LinkButton } from './LinkButton';
 

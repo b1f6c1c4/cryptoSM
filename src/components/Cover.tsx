@@ -1,8 +1,8 @@
 import { createSetContentAction, IActionSetContent } from '../actions/currentView';
 import { getContent } from '../contents/Content';
 import { ContentType } from '../contents/ContentType';
-import * as React from '../external/react';
-import { connect } from '../external/reactRedux';
+import * as React from 'react';
+import { connect } from 'react-redux';
 import { IRootState } from '../RootState';
 import { Button } from './Button';
 import { Header } from './Header';

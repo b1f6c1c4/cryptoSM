@@ -1,8 +1,8 @@
 import { accessAnswerByIndex } from '../AccessAnswer';
 import { createSetAnswerAction, FBAnswer } from '../actions/answers';
 import { ICategory, IFillBlankQuestion } from '../data/categories';
-import * as React from '../external/react';
-import { connect } from '../external/reactRedux';
+import * as React from 'react';
+import { connect } from 'react-redux';
 import { IRootState } from '../RootState';
 import { InputField } from './InputField';
 

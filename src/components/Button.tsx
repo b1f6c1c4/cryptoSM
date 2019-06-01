@@ -1,4 +1,4 @@
-import * as React from '../external/react.js';
+import * as React from 'react';
 
 interface IButtonProps {
   readonly icon: string;

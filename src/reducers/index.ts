@@ -1,4 +1,4 @@
-import { combineReducers } from '../external/redux';
+import { combineReducers } from 'redux';
 import { answers } from './answers';
 import { compare } from './compare';
 import { currentView } from './currentView';

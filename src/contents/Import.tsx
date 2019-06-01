@@ -3,8 +3,8 @@ import { Card } from '../components/Card';
 import { InputField } from '../components/InputField';
 import { LinkButton } from '../components/LinkButton';
 import { SimpleFormat } from '../components/SimpleFormat';
-import * as React from '../external/react';
-import { connect } from '../external/reactRedux';
+import * as React from 'react';
+import { connect } from 'react-redux';
 import { decode } from '../persistence';
 import { IAnswersState } from '../reducers/answers';
 

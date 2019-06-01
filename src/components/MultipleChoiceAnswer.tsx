@@ -1,8 +1,8 @@
 import { accessAnswerByIndex } from '../AccessAnswer';
 import { createSetAnswerAction, IActionSetAnswer, MCAnswer } from '../actions/answers';
 import { categories, ICategory, IMultipleChoiceQuestion } from '../data/categories';
-import * as React from '../external/react';
-import { connect } from '../external/reactRedux';
+import * as React from 'react';
+import { connect } from 'react-redux';
 import { IRootState } from '../RootState';
 
 interface IOneChoiceProps {

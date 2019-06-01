@@ -5,7 +5,7 @@ import {
   IActionReplaceAnswers,
   IActionSetAnswer,
 } from '../actions/answers';
-import update from '../external/immutabilityHelper';
+import update from 'immutability-helper';
 
 export interface ICategoryState {
   [ questionId: number ]: Answer;

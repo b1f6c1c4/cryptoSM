@@ -5,7 +5,7 @@ import {
   IActionSetContent,
 } from '../actions/currentView';
 import { ContentType } from '../contents/ContentType';
-import update from '../external/immutabilityHelper';
+import update from 'immutability-helper';
 
 export interface ICurrentViewState {
   cover: boolean;

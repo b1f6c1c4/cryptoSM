@@ -1,8 +1,8 @@
 import { Cover } from './components/Cover';
-import * as React from './external/react';
-import { render } from './external/reactDOM';
-import { Provider } from './external/reactRedux';
-import { applyMiddleware, compose, createStore } from './external/redux';
+import * as React from 'react';
+import { render } from 'react-dom';
+import { Provider } from 'react-redux';
+import { applyMiddleware, compose, createStore } from 'redux';
 import { decode, encode } from './persistence';
 import { reducers } from './reducers/index';
 import { IRootState } from './RootState';

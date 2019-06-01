@@ -1,5 +1,5 @@
 import { Answer } from './actions/answers';
-import { deflate, inflate } from './external/pako';
+import { deflate, inflate } from 'pako';
 import { IAnswersState } from './reducers/answers';
 
 export function encode(input: IAnswersState): string {
