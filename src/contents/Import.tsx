@@ -59,12 +59,12 @@ class ImporterUW extends React.PureComponent<IImporterProps, IImporterState> {
       }
       if (result === null) {
         this.setState({
-          hint: t('lab.sm.import.failed'),
+          hint: 'lab.sm.import.failed',
           hintColor: 'red',
         });
       } else {
         this.setState({
-          hint: t('lab.sm.import.successful'),
+          hint: 'lab.sm.import.successful',
           hintColor: 'green',
         });
         this.props.replaceAnswers(result);
@@ -90,7 +90,7 @@ class ImporterUW extends React.PureComponent<IImporterProps, IImporterState> {
         </LinkButton>
         { this.state.hint && <p style={{
           color: this.state.hintColor,
-        }}>{ this.state.hint }</p> }
+        }}>{ t(this.state.hint) }</p> }
       </div>
     );
   }
