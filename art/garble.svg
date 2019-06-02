@@ -1,0 +1,71 @@
+
+	<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="128" height="128" viewBox="0 0 100 100">
+
+
+		<defs>
+			<g id="background">
+<path fill="url(#background-gradient)" stroke="none" d=" M 100 100 L 100 0 0 0 0 100 100 100 Z"/>
+</g><g id="middle-1">
+<path fill="#FFFFFF" stroke="none" d=" M 89.3 10.6 L 89.3 10.55 10.55 10.55 10.55 89.25 10.65 89.25 89.3 89.25 89.3 10.6 Z"/>
+
+<path fill="#000000" fill-opacity="0.4" stroke="none" d=" M 99.95 21.9 L 89.3 10.6 89.3 89.25 10.65 89.25 10.55 89.3 21.25 99.85 99.95 100 99.95 21.9 Z"/>
+</g><mask id="mask">
+<path fill="#FFFFFF" stroke="none" d=" M 89.4 89.35 L 89.4 10.65 10.65 10.65 10.65 89.35 89.4 89.35 Z"/>
+</mask>
+			
+	<linearGradient id="background-gradient" x1="0" y1="0" y2="1" x2="0" >
+		<stop stop-color="#F7A8BE" offset="0%"/>
+		<stop stop-color="#F7A8BE" offset="100%"/>
+	</linearGradient>
+
+			
+			
+	<filter id="drop-shadow">
+		<feGaussianBlur in="SourceAlpha" stdDeviation="0" />
+		<feComponentTransfer>
+			<feFuncA type="linear" slope="0.1"/>
+		</feComponentTransfer>
+		<feOffset dx="5" dy="5" result="offsetblur" />
+		<feFlood flood-color="#000" />
+		<feComposite in2="offsetblur" operator="in" />
+		<feMerge>
+			<feMergeNode />
+			<feMergeNode in="SourceGraphic" />
+		</feMerge>
+	</filter>
+
+			<g transform="scale(1.9685039665718373) translate(2.799999952316284 2.1500003337860107)" id="picture"><path d="M48 25.3l-9.1-1.4-4.1-8.3-4.1 8.3-9.2 1.2 6.6 6.5-1.6 9.1 8.2-4.2 8.1 4.4-1.5-9.2 M29.5 22.3l5.1-10.2 4.6 9.6c3-6.8 1.4-15.5-6.6-16.8-10.8-1.7-12.3 8.4-12.3 8.4S18.9 3.2 8 4.9C-2.8 6.6-2 21.7 6 27.8c7.4 5.6 13.4 9.7 14.2 15.5h.2c.4-3.2 2.4-5.9 5.4-8.6l.5-2.8-8.1-8 11.3-1.6z"/></g>
+			
+	<linearGradient id="picture-gradient" x1="0" y1="0" y2="1" x2="0" >
+		<stop stop-color="#fca8ac" offset="0%"/>
+		<stop stop-color="#f15407" offset="100%"/>
+	</linearGradient>
+
+		</defs>
+
+		
+
+			<use xlink:href="#background" fill="url(#background-gradient)" />
+
+		<use xlink:href="#middle-1" />
+
+			<g mask="url(#mask)">
+				<g transform="
+				        translate(
+                                50 50
+)
+                            translate(0 0)  scale(0.5)  
+                            translate(
+                                -50 -50
+)">
+					<g filter="url(#drop-shadow)">
+						<use xlink:href="#picture" fill="url(#picture-gradient)"  />
+					</g>
+				</g>
+			</g>
+
+		
+
+
+
+	</svg>
