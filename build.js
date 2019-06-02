@@ -16,6 +16,9 @@ async function makeBundle() {
   shell.sed('-i', /Workaround/, '', 'dist/*.html');
   // shell.cp('art/*', 'dist/');
   shell.cp('-r', 'bin/', 'dist/');
+  shell
+    .echo('https://crypto-sm.netlify.com/* https://sm.b1f6c1c4.info/:splat 301!')
+    .to('dist/_redirects');
 }
 
 makeBundle();
