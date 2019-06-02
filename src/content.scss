@@ -77,8 +77,12 @@
     }
   }
   &.compare {
-    p.error {
+    p.warning {
       color: red;
+    }
+    p.finished {
+      text-decoration: line-through;
+      color: darkgray;
     }
     table {
       width: 100%;

@@ -207,6 +207,9 @@ class CompareFormUW extends React.PureComponent<
       case 11:
         return (
           <div>
+            <SimpleFormat className="warning">
+              {t('lab.sm.compare.alice.slow')}
+            </SimpleFormat>
             <SimpleFormat>
               {t('lab.sm.compare.alice.send1get2')}
             </SimpleFormat>
@@ -229,6 +232,12 @@ class CompareFormUW extends React.PureComponent<
       case 12:
         return (
           <div>
+            <SimpleFormat className="finished">
+              {t('lab.sm.compare.alice.slow')}
+            </SimpleFormat>
+            <SimpleFormat className="finished">
+              {t('lab.sm.compare.alice.send1get2')}
+            </SimpleFormat>
             <SimpleFormat>
               {t('lab.sm.compare.alice.send3get4')}
             </SimpleFormat>
@@ -242,6 +251,9 @@ class CompareFormUW extends React.PureComponent<
       case 22:
         return (
           <div>
+            <SimpleFormat className="finished">
+              {t('lab.sm.compare.bob.get1')}
+            </SimpleFormat>
             <SimpleFormat>
               {t('lab.sm.compare.bob.send2get3')}
             </SimpleFormat>
@@ -255,6 +267,12 @@ class CompareFormUW extends React.PureComponent<
       case 23:
         return (
           <div>
+            <SimpleFormat className="finished">
+              {t('lab.sm.compare.bob.get1')}
+            </SimpleFormat>
+            <SimpleFormat className="finished">
+              {t('lab.sm.compare.bob.send2get3')}
+            </SimpleFormat>
             <SimpleFormat>
               {t('lab.sm.compare.bob.send4')}
             </SimpleFormat>

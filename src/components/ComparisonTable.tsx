@@ -47,10 +47,13 @@ class ComparisonTableUW extends React.PureComponent<
       return answerRaw;
     }
   }
-  private convertSchrodingerToElement(schrodinger: string | null | undefined) {
+  private convertSchrodingerToElement(schrodinger: string | null | undefined, raw: number | undefined) {
     const t = this.props.t;
     if (schrodinger) {
-      return <td>{ t(schrodinger) }</td>;
+      const color = raw === undefined ? undefined : `rgb(255,255,${255 - (3 - raw) * (3 - raw) * 13})`;
+      return <td style={{
+        background: color,
+      }}>{ t(schrodinger) }</td>;
     } else if (schrodinger === null) {
       return <td className='empty'>{ '< ' + t('lab.sm.compare.table.empty') + ' >' }</td>;
     } else {
@@ -106,10 +109,12 @@ class ComparisonTableUW extends React.PureComponent<
               question,
               lAnswerRaw = (accessAnswerById(rAnswers, cid, qid) as any)[id],
             );
+            if (lAnswer === null) lAnswer = undefined;
             rAnswer = this.convertAnswerToSchrodinger(
               question,
               rAnswerRaw = (accessAnswerById(rAnswers, cid, qid) as any)[1 - id],
             );
+            if (rAnswer === null) rAnswer = undefined;
           } else {
             continue; // TODO
           }
@@ -121,20 +126,10 @@ class ComparisonTableUW extends React.PureComponent<
           continue;
         }
 
-        const sTd = this.convertSchrodingerToElement(lAnswer);
-        const mTd = this.convertSchrodingerToElement(rAnswer);
+        const sTd = this.convertSchrodingerToElement(lAnswer, question.uncomparable ? undefined : lAnswerRaw);
+        const mTd = this.convertSchrodingerToElement(rAnswer, question.uncomparable ? undefined : rAnswerRaw);
 
         let color = shouldHideIfNotShowAll ? '#eee' : 'white';
-
-        if ( // The question is comparable and answered
-          (!question.uncomparable) &&
-          (lAnswer) &&
-          (rAnswer)
-        ) {
-          const sDist = 3 - (lAnswerRaw as number);
-          const mDist = 3 - (rAnswerRaw as number);
-          color = `rgb(255,255,${255 - sDist * mDist * 10})`;
-        }
 
         results.push(
           <tr key={ cid + ',' + qid } style={{
