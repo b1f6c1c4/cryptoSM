@@ -7,6 +7,9 @@ import { decode, encode } from './persistence';
 import { reducers } from './reducers/index';
 import { IRootState } from './RootState';
 import './i18n';
+import 'typeface-poiret-one';
+import 'roboto-fontface';
+import 'notosans-fontface';
 
 const getEncodedAnswers = () => window.localStorage.getItem('encodedAnswers');
 

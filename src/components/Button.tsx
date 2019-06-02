@@ -13,7 +13,7 @@ export class Button extends React.PureComponent<IButtonProps> {
         className={ 'button ' + this.props.class }
         onClick={ this.props.onClick }
       >
-        <i className='material-icons'>{ this.props.icon }</i>
+        {this.props.children}
         <span>{ this.props.text }</span>
       </div>
     );

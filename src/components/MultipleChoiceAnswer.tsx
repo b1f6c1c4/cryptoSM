@@ -4,17 +4,17 @@ import { categories, ICategory, IMultipleChoiceQuestion } from '../data/categori
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
+import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 import { IRootState } from '../RootState';
 
 interface IOneChoiceProps {
   readonly selected: boolean;
 }
-const OneChoice = ({ selected }: IOneChoiceProps) => (
-  <i className='material-icons'>
-    { selected
-      ? 'radio_button_checked'
-      : 'radio_button_unchecked' }
-  </i>
+const OneChoice = ({ selected }: IOneChoiceProps) => selected ? (
+  <RadioButtonCheckedIcon />
+) : (
+  <RadioButtonUncheckedIcon />
 );
 interface IMultipleChoiceAnswerOwnProps {
   readonly categoryIndex: number;

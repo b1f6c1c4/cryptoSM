@@ -4,6 +4,12 @@ import { ContentType } from '../contents/ContentType';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { withTranslation, useTranslation } from 'react-i18next';
+import EditIcon from '@material-ui/icons/Edit';
+import CompareIcon from '@material-ui/icons/Compare';
+import LanguageIcon from '@material-ui/icons/Language';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import InfoIcon from '@material-ui/icons/Info';
 import { IRootState } from '../RootState';
 import { Button } from './Button';
 import { Header } from './Header';
@@ -51,40 +57,46 @@ class ButtonPanelUW extends React.PureComponent<IButtonPanelProps> {
       <div className='button-panel'>
         <Button
           class='start'
-          icon='edit'
           text={t('lab.sm.landing.start')}
           onClick={ this.onClickStart }
-        />
+        >
+          <EditIcon />
+        </Button>
         <Button
           class='compare'
-          icon='compare'
           text={t('lab.sm.landing.compare')}
           onClick={ this.onClickCompare }
-        />
+        >
+          <CompareIcon />
+        </Button>
         <Button
           class='language'
-          icon='language'
           text='Language'
           onClick={ this.onClickLanguage }
-        />
+        >
+          <LanguageIcon />
+        </Button>
         <Button
           class='import'
-          icon='file_download'
           text={t('lab.sm.landing.import')}
           onClick={ this.onClickImport }
-        />
+        >
+          <CloudUploadIcon />
+        </Button>
         <Button
           class='export'
-          icon='file_upload'
           text={t('lab.sm.landing.export')}
           onClick={ this.onClickExport }
-        />
+        >
+          <CloudDownloadIcon />
+        </Button>
         <Button
           class='about'
-          icon='info'
           text={t('lab.sm.landing.about')}
           onClick={ this.onClickAbout }
-        />
+        >
+          <InfoIcon />
+        </Button>
       </div>
     );
   }

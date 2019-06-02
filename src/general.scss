@@ -1,6 +1,6 @@
 body {
   background-color: rgb(239, 239, 237);
-  font-family: 'Roboto', 'Noto Sans SC', sans-serif;
+  font-family: 'Roboto', 'Noto Sans SC', 'Microsoft YaHei New', 'Microsoft Yahei', '微软雅黑', '宋体', SimSun, STXihei, '华文细黑', sans-serif;
   margin: 0 0 2vmin 0;
   white-space: pre-line;
 }
@@ -43,22 +43,25 @@ body {
   }
 }
 .button {
+  white-space: nowrap;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   border: 2px solid white;
   box-sizing: border-box;
   cursor: pointer;
   font-size: 4vmin;
   height: 8vmin;
-  line-height: 7.5vmin;
   padding-left: 1.5vmin;
   transition: background-color 0.2s, color 0.2s;
   user-select: none;
   width: 26vmin;
-  >span, >i {
+  >span, >svg {
     font-size: 3.9vmin;
     margin-right: 1vmin;
   }
-  >i {
-    transform: translateY(0.6vmin);
+  >span {
+    padding-bottom: 2px;
   }
   &:hover {
     background-color: white;
@@ -82,7 +85,7 @@ body {
     height: calc(100% - 64px);
     position: relative;
     >.title-container {
-      font-family: 'Poiret One', sans-serif;
+      font-family: 'Poiret One', 'Microsoft YaHei New', 'Microsoft Yahei', '微软雅黑', '宋体', SimSun, STXihei, '华文细黑', sans-serif;
       position: absolute;
       left: 6vmin;
       bottom: 8vmin;
