@@ -15,8 +15,10 @@ import { IAnswersState } from '../reducers/answers';
 import { LinkButton } from './LinkButton';
 
 interface IComparisonTableProps {
-  readonly s: IAnswersState;
-  readonly m: IAnswersState;
+  readonly basic: boolean;
+  readonly my: IAnswersState;
+  readonly partner: IAnswersState;
+  readonly reversed: boolean;
 }
 interface IComparisonTableState {
   readonly showAll: boolean;
@@ -61,86 +63,76 @@ class ComparisonTableUW extends React.PureComponent<
   }
   private renderRows(): Array<React.ReactNode> {
     const t = this.props.t;
-    const sAnswers = this.props.s;
-    const mAnswers = this.props.m;
+    const basic = this.props.basic;
+    const lAnswers = basic ? { [0]: this.props.my } : this.props.my;
+    const rAnswers = basic ? { [0]: this.props.partner } : this.props.partner;
     const results: Array<React.ReactNode> = [];
     const showAll = this.state.showAll;
     for (const category of categories) {
       const cid = category.categoryId;
+      if (basic && cid) continue;
+      if (!basic && !cid) continue;
+
       for (const question of category.questions) {
         const qid = question.questionId;
 
-        let sAnswerRaw: string | number | null = null;
-        let mAnswerRaw: string | number | null = null;
+        let lAnswerRaw: string | number | null = null;
+        let rAnswerRaw: string | number | null = null;
 
         // null = empty
         // undefined = unavailable
-        let sAnswer: string | null | undefined;
-        let mAnswer: string | null | undefined;
+        let lAnswer: string | null | undefined;
+        let rAnswer: string | null | undefined;
 
-        // This part of the code tried to extract the answers of both role.
-        // I know it is terrible. I failed the desgin. I am sorry.
-        if (question.bianswer) {
-          const { showS } = getBianswerQuestionDisplayInfo(sAnswers, question);
-          if (!showS) {
-            sAnswer = undefined;
+        if (basic) {
+          if (question.bianswer) {
+            continue; // TODO
           } else {
-            sAnswer = this.convertAnswerToSchrodinger(
+            lAnswer = this.convertAnswerToSchrodinger(
               question,
-              sAnswerRaw = ((accessAnswerById(sAnswers, cid, qid) as any)[0]),
+              lAnswerRaw = (accessAnswerById(lAnswers, cid, qid) as any),
             );
-          }
-          const { showM } = getBianswerQuestionDisplayInfo(mAnswers, question);
-          if (!showM) {
-            mAnswer = undefined;
-          } else {
-            mAnswer = this.convertAnswerToSchrodinger(
+            rAnswer = this.convertAnswerToSchrodinger(
               question,
-              mAnswerRaw = ((accessAnswerById(mAnswers, cid, qid) as any)[1]),
+              rAnswerRaw = (accessAnswerById(rAnswers, cid, qid) as any),
             );
           }
         } else {
-          const showS = getNonBianswerQuestionDisplayInfo(sAnswers, question);
-          if (!showS) {
-            sAnswer = undefined;
-          } else {
-            sAnswer = this.convertAnswerToSchrodinger(
+          if (question.uncomparable) {
+            continue;
+          } else if (question.bianswer) {
+            const id = this.props.reversed ? 1 : 0;
+            lAnswer = this.convertAnswerToSchrodinger(
               question,
-              sAnswerRaw = (accessAnswerById(sAnswers, cid, qid) as any),
+              lAnswerRaw = (accessAnswerById(rAnswers, cid, qid) as any)[id],
             );
-          }
-          const showM = getNonBianswerQuestionDisplayInfo(mAnswers, question);
-          if (!showM) {
-            mAnswer = undefined;
-          } else {
-            mAnswer = this.convertAnswerToSchrodinger(
+            rAnswer = this.convertAnswerToSchrodinger(
               question,
-              mAnswerRaw = (accessAnswerById(mAnswers, cid, qid) as any),
+              rAnswerRaw = (accessAnswerById(rAnswers, cid, qid) as any)[1 - id],
             );
+          } else {
+            continue; // TODO
           }
         }
 
-        const shouldHideIfNotShowAll = (question.uncomparable
-          ? sAnswer === undefined && mAnswer === undefined
-          : sAnswer === undefined || mAnswer === undefined
-        );
+        const shouldHideIfNotShowAll = lAnswer === undefined && rAnswer === undefined;
 
         if (!showAll && shouldHideIfNotShowAll) {
           continue;
         }
 
-        const sTd = this.convertSchrodingerToElement(sAnswer);
-        const mTd = this.convertSchrodingerToElement(mAnswer);
+        const sTd = this.convertSchrodingerToElement(lAnswer);
+        const mTd = this.convertSchrodingerToElement(rAnswer);
 
         let color = shouldHideIfNotShowAll ? '#eee' : 'white';
 
         if ( // The question is comparable and answered
           (!question.uncomparable) &&
-          (sAnswer) &&
-          (mAnswer)
+          (lAnswer) &&
+          (rAnswer)
         ) {
-          const sDist = 3 - (sAnswerRaw as number);
-          const mDist = 3 - (mAnswerRaw as number);
+          const sDist = 3 - (lAnswerRaw as number);
+          const mDist = 3 - (rAnswerRaw as number);
           color = `rgb(255,255,${255 - sDist * mDist * 10})`;
         }
 
@@ -159,24 +151,31 @@ class ComparisonTableUW extends React.PureComponent<
   }
   public render() {
     const t = this.props.t;
+    const headContent = this.props.basic ? (
+        <tr>
+          <th>{ t('lab.sm.compare.table.basic') }</th>
+          <th>{ t('lab.sm.compare.table.myInfo') }</th>
+          <th>{ t('lab.sm.compare.table.partnerInfo' }</th>
+        </tr>
+      ) : (
+        <tr>
+          <th>{ t('lab.sm.compare.table.item') }</th>
+          <th>{ t('lab.sm.compare.table.meAsS') }</th>
+          <th>{ t('lab.sm.compare.table.meAsM') }</th>
+        </tr>
+      );
     return (
       <React.Fragment>
-        <LinkButton
+        {!this.props.basic && <LinkButton
           children={
             this.state.showAll
               ? t('lab.sm.compare.table.switchToShowAvailable')
               : t('lab.sm.compare.table.switchToShowAll')
           }
           onClick={ this.onClickSwitchShowMode }
-        />
+        />}
         <table>
-          <thead>
-            <tr>
-              <th>{ t('lab.sm.compare.table.item') }</th>
-              <th>{ t('lab.sm.compare.table.sChoice') }</th>
-              <th>{ t('lab.sm.compare.table.mChoice') }</th>
-            </tr>
-          </thead>
+          <thead>{ headContent }</thead>
           <tbody>
             { this.renderRows() }
           </tbody>

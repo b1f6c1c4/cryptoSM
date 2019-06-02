@@ -22,12 +22,16 @@ if (process.env.NODE_ENV === 'production') {
   ({ Module } = window);
 } else {
   class Alice4 {
+    constructor(v) { this.v = v; }
     public garble = () => '--garble--';
-    public receive = () => '--receive-';
+    public receive = () => '--receive' + v;
+    public remove = () => {};
   }
   class Bob4 {
+    constructor(v) { this.v = v; }
     public inquiry = () => '--inquiry-';
-    public evaluate = () => 2;
+    public evaluate = (r) => Math.min(this.v, parseInt(r.substr(9), 10));
+    public remove = () => {};
   }
   Module = {
     garbleSize4: 5,
@@ -42,7 +46,6 @@ interface ICompareFormProps {
   readonly formSValue: string;
   readonly formMValue: string;
   readonly currentAnswers: IAnswersState;
-  readonly setCompareForm: typeof createSetCompareFormAction;
   readonly startCompare: typeof createStartCompareAction;
 }
 interface ICompareFormState {
@@ -96,13 +99,13 @@ class CompareFormUW extends React.PureComponent<
       case 11:
         download('1-alice-to-bob', output + JSON.stringify(basic));
         break;
-      case 21:
+      case 22:
         download('2-bob-to-alice', output);
         break;
       case 12:
         download('3-alice-to-bob', output);
         break;
-      case 22:
+      case 23:
         download('4-bob-to-alice', JSON.stringify({ output, basic }));
         break;
     }
@@ -113,16 +116,14 @@ class CompareFormUW extends React.PureComponent<
       case 21:
         this.setState({ step: step + 1, output: '' });
         break;
-      case 22: {
+      case 23: {
         const { output, alice0 } = this.state;
-        global.console.log({ output, basic: alice0 }); // TODO
-        // this.props.startCompare(sAnswers, mAnswers);
+        this.props.startCompare(output, alice0, true);
         break;
     }
   }
   private handleUpload = ({ target }) => {
     const { files: [f] } = target;
-    target.value = null;
     if (!f) {
       return;
     }
@@ -138,15 +139,21 @@ class CompareFormUW extends React.PureComponent<
             output += o.inquiry(str.substr(0, Module.garbleSize4 * 2));
             str = str.substr(Module.garbleSize4 * 2);
           });
-          this.setState({ output, alice0: JSON.parse(str) });
+          this.setState({
+            step: 22,
+            output,
+            alice0: JSON.parse(str),
+          });
           break;
         }
         case 11: {
+          target.value = null;
           let str = result;
           let output = '';
           this.state.gc.forEach((o) => {
             output += o.receive(str.substr(0, Module.inquirySize4 * 2));
             str = str.substr(Module.inquirySize4 * 2);
+            o.remove();
           });
           this.setState({ step: 12, output });
           break;
@@ -160,14 +167,18 @@ class CompareFormUW extends React.PureComponent<
               r = NaN;
             output.push(r);
             str = str.substr(Module.receiveSize4 * 2);
+            o.remove();
           });
-          this.setState({ output: smDiscuss(output) });
+          this.setState({
+            step: 23,
+            output: smDiscuss(output),
+          });
           break;
         }
         case 12: {
+          target.value = null;
           const { output, basic } = JSON.parse(result);
-          global.console.log({ output, basic }); // TODO
-          // this.props.startCompare(sAnswers, mAnswers);
+          this.props.startCompare(output, basic, false);
           break;
         }
       }
@@ -210,17 +221,9 @@ class CompareFormUW extends React.PureComponent<
         return (
           <div>
             <SimpleFormat>
-              {t('lab.sm.compare.bob.get1send2')}
+              {t('lab.sm.compare.bob.get1')}
             </SimpleFormat>
             <input type="file" onChange={this.handleUpload} />
-            {this.state.output && <LinkButton
-              children={t('lab.sm.compare.download')}
-              onClick={ this.handleDownload }
-            />}
-            {this.state.output && <LinkButton
-              children={t('lab.sm.compare.next')}
-              onClick={ this.onClickNext }
-            />}
           </div>
         );
       case 12:
@@ -240,36 +243,46 @@ class CompareFormUW extends React.PureComponent<
         return (
           <div>
             <SimpleFormat>
-              {t('lab.sm.compare.bob.get3send4')}
+              {t('lab.sm.compare.bob.send2get3')}
             </SimpleFormat>
-            <input type="file" onChange={this.handleUpload} />
-            {this.state.output && <LinkButton
+            <LinkButton
               children={t('lab.sm.compare.download')}
               onClick={ this.handleDownload }
-            />}
-            {this.state.output && <LinkButton
+            />
+            <input type="file" onChange={this.handleUpload} />
+          </div>
+        );
+      case 23:
+        return (
+          <div>
+            <SimpleFormat>
+              {t('lab.sm.compare.bob.send4')}
+            </SimpleFormat>
+            <LinkButton
+              children={t('lab.sm.compare.download')}
+              onClick={ this.handleDownload }
+            />
+            <LinkButton
               children={t('lab.sm.compare.show')}
               onClick={ this.onClickNext }
-            />}
+            />
           </div>
         );
     }
   }
 }
 const CompareForm = withTranslation()(connect((state: IRootState) => ({
-  formSValue: state.compare.form.s,
-  formMValue: state.compare.form.m,
   currentAnswers: state.answers,
 }), {
-  setCompareForm: createSetCompareFormAction,
   startCompare: createStartCompareAction,
 })(CompareFormUW));
 
 interface ICompareProps {
   readonly comparing: null | {
-    s: IAnswersState,
-    m: IAnswersState,
+    o: IAnswersState,
+    b: IAnswersState,
   };
+  readonly currentAnswers: IAnswersState;
   readonly clearCompare: typeof createClearCompareAction;
 }
 class CompareUW extends React.PureComponent<ICompareProps> {
@@ -289,8 +302,14 @@ class CompareUW extends React.PureComponent<ICompareProps> {
             onClick={ this.props.clearCompare }
           />
           <ComparisonTable
-            s={ this.props.comparing.s }
-            m={ this.props.comparing.m }
+            basic
+            my={ this.props.currentAnswers[0] }
+            partner={ this.props.comparing.b }
+          />
+          <ComparisonTable
+            my={ this.props.currentAnswers }
+            partner={ this.props.comparing.o }
+            reversed={ this.props.comparing.reversed }
           />
         </Card> }
       </div>
@@ -298,6 +317,7 @@ class CompareUW extends React.PureComponent<ICompareProps> {
   }
 }
 export const Compare = withTranslation()(connect((state: IRootState) => ({
+  currentAnswers: state.answers,
   comparing: state.compare.comparing,
 }), {
   clearCompare: createClearCompareAction,

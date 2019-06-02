@@ -1,70 +1,47 @@
-import { encode } from './persistence';
-import { inflate } from 'pako';
 import _set from 'lodash/set';
-
-function smDecode(input) {
-  return JSON.parse(inflate(
-    window.atob(input),
-    { to: 'string' },
-  ));
-}
-
-const maxL = [15, 9, 22, 12, 10, 3, 4];
+import _get from 'lodash/get';
+import { categories } from './data/categories';
 
 // Convert my preference into a big 1-D array
 // such that I can GC against my partner.
 export function smPrepare(input, reversed) {
-  const [
-    , // Personal information, discarded
-    ...pref // SM information
-  ] = smDecode(encode(input)); // TODO: silly design
-  pref.length = 7;
-  _set(pref, '[2][4]', null); // C3Q4 must by omitted
-  _set(pref, '[2][7]', null); // C3Q7 must by omitted
-
   const res = [];
-  [...pref].forEach((c, cid) => {
-    if (!c) {
-      c = [];
-    }
-    c.length = maxL[cid];
-    [...c].forEach((q) => {
-      if (q === undefined || q === null) {
-        res.push(0, 0);
-      } else {
-        if (reversed) {
-          q.reverse();
-        }
-        [...q].forEach((o) => {
-          if (o === undefined || o === null) {
-            res.push(0);
+  categories.forEach(({ categoryId, questions }) => {
+    questions.forEach(({ questionId, bianswer, uncomparable }) => {
+      if (!uncomparable) {
+        if (bianswer) {
+          if (!reversed) {
+            res.push(_get(input, [categoryId, questionId, 0]));
+            res.push(_get(input, [categoryId, questionId, 1]));
           } else {
-            res.push(3 - o);
+            res.push(_get(input, [categoryId, questionId, 1]));
+            res.push(_get(input, [categoryId, questionId, 0]));
           }
-        });
+        } else {
+          res.push(_get(input, [categoryId, questionId]));
+        }
       }
     });
   });
-  return res;
+  return res.map((v) => (v === undefined ? 0 : 3 - v));
 }
 
 // Convert the a big 1-D array (minimium of mine and my partner's)
 // into the internal form such that we can graphically display it.
 export function smDiscuss(result) {
-  const res = [];
-  const rst = [...result];
-  maxL.forEach((ml, ci) => {
-    const c = rst.splice(0, ml * 2);
-    const asbm = !!c[0];
-    const ambs = !!c[1];
-    for (let qi = 0; qi < ml; qi += 1) {
-      if (asbm && c[2 * qi]) {
-        res += `AliceS+BobM\tC${1 + ci}Q${qi}\t${c[2 * qi]}\n`;
+  const map = (v) => v ? 3 - v : undefined;
+  const res = {};
+  categories.forEach(({ categoryId, questions }) => {
+    questions.forEach(({ questionId, bianswer, uncomparable }) => {
+      if (!uncomparable) {
+        if (bianswer) {
+          _set(res, [categoryId, questionId, 0], map(result.shift(1)));
+          _set(res, [categoryId, questionId, 1], map(result.shift(1)));
+        } else {
+          _set(res, [categoryId, questionId], map(result.shift(1)));
+        }
       }
-      if (ambs && c[2 * qi + 1]) {
-        res += `AliceM+BobS\tC${1 + ci}Q${qi}\t${c[2 * qi + 1]}\n`;
-      }
-    }
+    });
   });
   return res;
 }
