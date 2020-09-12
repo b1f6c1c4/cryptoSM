@@ -2,15 +2,11 @@ Language: zh_HK
 lab.sm:
   landing:
     start: 開始填寫
-    import: 導入數據
-    export: 導出數據
     about: 關於
     privacyNotice: >-
       您使用 cryptoSM 時產生的所有數據僅會被保存在您的瀏覽器中。沒有數據會被上傳至 SM Contract/cryptoSM 服務器。
   contentTitle:
     profile: 資料
-    reset: 導入數據
-    backup: 導出數據
     about: 關於
   profile:
     categoryIndexLabel: 第 {{id}} 部分
@@ -72,18 +68,3 @@ lab.sm:
       switchToShowAvailable: 切換至「僅顯示有效問題」
       title: 結果
       unavailable: 不可用
-  backup:
-    title: 導出數據
-    desc: >-
-      cryptoSM 會自動將您填寫的信息保存到瀏覽器的 localStorage 中，於此同時，您所填寫的信息已經被壓縮到下面這個 base64 字符串中。您可以將其複製到任何地方進行保存，並在另一台電腦中使用「導入數據」功能導入。
-
-      或者，您可以將導出的數據發送給您的搭檔，您的搭檔可以用「對比」功能來查看你們之間適合進行什麼類型的 play。
-  reset:
-    confirm: 您確定要替換當前填寫的所有信息嗎？ (請再次點擊)
-    failed: 導入失敗，數據格式錯誤
-    import: 開始導入
-    label: 請將要導入的數據粘貼在這個輸入框中
-    successful: 導入成功
-    title: 導入數據
-    desc: >-
-      您可以將之前使用「導出數據」獲得的 base64 字符串導入。請注意，導入數據將會覆蓋您目前填寫的所有信息。此操作不可逆。

@@ -3,16 +3,16 @@ lab.sm:
   landing:
     start: 开始填写
     compare: 隐私对比
-    import: 导入数据
-    export: 导出数据
+    reset: 清空数据
+    backup: 备份数据
     about: 关于
     privacyNotice: >-
       您使用 cryptoSM 时产生的所有数据仅会被保存在您的浏览器中。没有数据会被上传至 SM Contract/cryptoSM 服务器。
   contentTitle:
     profile: 资料
     compare: 隐私对比
-    reset: 导入数据
-    backup: 导出数据
+    reset: 清空数据
+    backup: 备份数据
     about: 关于
   profile:
     categoryIndexLabel: 第 {{id}} 部分
@@ -100,17 +100,24 @@ lab.sm:
       title: 结果
       unavailable: 不可用
   backup:
-    title: 导出数据
+    title: 备份数据
     desc: >-
-      cryptoSM 会自动将您填写的信息保存到浏览器的 localStorage 中，于此同时，您所填写的信息已经被压缩到下面这个 base64 字符串中。您可以将其复制到任何地方进行保存，并在另一台电脑中使用「导入数据」功能导入。
+      cryptoSM 会自动将您填写的信息保存到浏览器的 localStorage 中，于此同时，您所填写的信息已经被压缩到下面这个 base64 字符串中。您可以将其复制到任何地方进行保存，并在另一台电脑中使用「还原数据」功能导入。
 
-      或者，您可以将导出的数据发送给您的搭档，您的搭档可以用「对比」功能来查看你们之间适合进行什么类型的 play。
-  reset:
+      请务必注意，以下信息包含您的个人隐私并且未经过任何形式的加密——这意味着任何人都可以轻易读取这些内容，甚至冒充您将其发布在网络上。一旦数据离开这个网页，保护这些信息安全就是您的职责了。
+  restore:
     confirm: 您确定要替换当前填写的所有信息吗？(请再次点击)
-    failed: 导入失败，数据格式错误
-    import: 开始导入
-    label: 请将要导入的数据粘贴在这个输入框中
-    successful: 导入成功
-    title: 导入数据
+    failed: 还原失败，数据格式错误
+    restore: 开始还原
+    label: 请将要还原的数据粘贴在这个输入框中
+    successful: 还原成功
+    title: 还原数据
     desc: >-
-      您可以将之前使用「导出数据」获得的 base64 字符串导入。请注意，导入数据将会覆盖您目前填写的所有信息。此操作不可逆。
+      您可以将之前使用「备份数据」获得的 base64 字符串导入。请注意，还原数据将会覆盖您目前填写的所有信息。此操作不可逆。
+  reset:
+    confirm: 您确定要清空当前填写的所有信息吗？(请再次点击)
+    restore: 清空所有信息
+    successful: 清空成功
+    title: 清空数据
+    desc: >-
+      您可以利用这个功能清空之前填写的所有数据。请注意，此操作不可逆。
