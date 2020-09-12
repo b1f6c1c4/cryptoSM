@@ -2,8 +2,8 @@ export enum ContentType {
   PROFILE,
   COMPARE,
   LANGUAGE,
-  IMPORT,
-  EXPORT,
+  RESET,
+  BACKUP,
   ABOUT,
 }
 
@@ -15,10 +15,10 @@ export function getContentTitle(t: any, type: ContentType): string {
       return t('lab.sm.contentTitle.compare');
     case ContentType.LANGUAGE:
       return 'Language Selection';
-    case ContentType.IMPORT:
-      return t('lab.sm.contentTitle.import');
-    case ContentType.EXPORT:
-      return t('lab.sm.contentTitle.export');
+    case ContentType.RESET:
+      return t('lab.sm.contentTitle.reset');
+    case ContentType.BACKUP:
+      return t('lab.sm.contentTitle.backup');
     case ContentType.ABOUT:
       return t('lab.sm.contentTitle.about');
   }

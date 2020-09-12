@@ -11,8 +11,8 @@ lab.sm:
   contentTitle:
     profile: 资料
     compare: 隐私对比
-    import: 导入数据
-    export: 导出数据
+    reset: 导入数据
+    backup: 导出数据
     about: 关于
   profile:
     categoryIndexLabel: 第 {{id}} 部分
@@ -99,13 +99,13 @@ lab.sm:
       switchToShowAvailable: 切换至「仅显示有效问题」
       title: 结果
       unavailable: 不可用
-  export:
+  backup:
     title: 导出数据
     desc: >-
       cryptoSM 会自动将您填写的信息保存到浏览器的 localStorage 中，于此同时，您所填写的信息已经被压缩到下面这个 base64 字符串中。您可以将其复制到任何地方进行保存，并在另一台电脑中使用「导入数据」功能导入。
 
       或者，您可以将导出的数据发送给您的搭档，您的搭档可以用「对比」功能来查看你们之间适合进行什么类型的 play。
-  import:
+  reset:
     confirm: 您确定要替换当前填写的所有信息吗？(请再次点击)
     failed: 导入失败，数据格式错误
     import: 开始导入
