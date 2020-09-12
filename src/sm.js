@@ -7,8 +7,8 @@ import { categories } from './data/categories';
 export function smPrepare(input, reversed) {
   const res = [];
   categories.forEach(({ categoryId, questions }) => {
-    questions.forEach(({ questionId, bianswer, uncomparable }) => {
-      if (!uncomparable) {
+    questions.forEach(({ questionId, bianswer, local }) => {
+      if (!local) {
         if (bianswer) {
           if (!reversed) {
             res.push(_get(input, [categoryId, questionId, 0]));
@@ -23,7 +23,11 @@ export function smPrepare(input, reversed) {
       }
     });
   });
-  return res.map((v) => (v === undefined ? 0 : 3 - v));
+  const resv = res.map((v) => (v === undefined ? 0 : 3 - v));
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(resv);
+  }
+  return resv;
 }
 
 // Convert the a big 1-D array (minimium of mine and my partner's)
@@ -32,8 +36,8 @@ export function smDiscuss(result) {
   const map = (v) => v ? 3 - v : undefined;
   const res = {};
   categories.forEach(({ categoryId, questions }) => {
-    questions.forEach(({ questionId, bianswer, uncomparable }) => {
-      if (!uncomparable) {
+    questions.forEach(({ questionId, bianswer, local }) => {
+      if (!local) {
         if (bianswer) {
           _set(res, [categoryId, questionId, 0], map(result.shift(1)));
           _set(res, [categoryId, questionId, 1], map(result.shift(1)));

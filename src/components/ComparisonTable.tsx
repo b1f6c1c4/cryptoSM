@@ -101,7 +101,7 @@ class ComparisonTableUW extends React.PureComponent<
             );
           }
         } else {
-          if (question.uncomparable) {
+          if (question.local) {
             continue;
           } else if (question.bianswer) {
             const id = this.props.reversed ? 1 : 0;
@@ -126,8 +126,8 @@ class ComparisonTableUW extends React.PureComponent<
           continue;
         }
 
-        const sTd = this.convertSchrodingerToElement(lAnswer, question.uncomparable ? undefined : lAnswerRaw);
-        const mTd = this.convertSchrodingerToElement(rAnswer, question.uncomparable ? undefined : rAnswerRaw);
+        const sTd = this.convertSchrodingerToElement(lAnswer, question.local ? undefined : lAnswerRaw);
+        const mTd = this.convertSchrodingerToElement(rAnswer, question.local ? undefined : rAnswerRaw);
 
         let color = shouldHideIfNotShowAll ? '#eee' : 'white';
 

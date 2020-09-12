@@ -14,7 +14,7 @@ export const category0: ICategory = {
     description: 'lab.sm.data.c0.q0.description',
     hardcoreness: HardcorenessMetrics.UNAVAILABLE,
     bianswer: false,
-    uncomparable: true,
+    local: true,
     choices: [
       'lab.sm.data.c0.q0.a0',
       'lab.sm.data.c0.q0.a1',
@@ -27,7 +27,7 @@ export const category0: ICategory = {
     description: 'lab.sm.data.c0.q1.description',
     hardcoreness: HardcorenessMetrics.UNAVAILABLE,
     bianswer: false,
-    uncomparable: true,
+    local: true,
     choices: [
       'lab.sm.data.shared.male',
       'lab.sm.data.shared.female',
@@ -39,7 +39,7 @@ export const category0: ICategory = {
     title: 'lab.sm.data.c0.q2.title',
     hardcoreness: HardcorenessMetrics.UNAVAILABLE,
     bianswer: false,
-    uncomparable: true,
+    local: true,
     choices: [
       'lab.sm.data.shared.have',
       'lab.sm.data.shared.haveNot',
@@ -53,7 +53,7 @@ export const category0: ICategory = {
     title: 'lab.sm.data.c0.q3.title',
     hardcoreness: HardcorenessMetrics.UNAVAILABLE,
     bianswer: false,
-    uncomparable: true,
+    local: true,
     choices: [
       'lab.sm.data.shared.can',
       'lab.sm.data.shared.cannot',
@@ -68,7 +68,7 @@ export const category0: ICategory = {
     title: 'lab.sm.data.c0.q4.title',
     hardcoreness: HardcorenessMetrics.UNAVAILABLE,
     bianswer: false,
-    uncomparable: true,
+    local: true,
     choices: [
       'lab.sm.data.shared.have',
       'lab.sm.data.shared.haveNot',
@@ -82,7 +82,7 @@ export const category0: ICategory = {
     title: 'lab.sm.data.c0.q5.title',
     hardcoreness: HardcorenessMetrics.UNAVAILABLE,
     bianswer: false,
-    uncomparable: true,
+    local: true,
     choices: [
       'lab.sm.data.shared.can',
       'lab.sm.data.shared.cannot',
@@ -97,7 +97,7 @@ export const category0: ICategory = {
     description: 'lab.sm.data.c0.q6.description',
     hardcoreness: HardcorenessMetrics.UNAVAILABLE,
     bianswer: true,
-    uncomparable: true,
+    local: true,
     choices: [
       'lab.sm.data.shared.male',
       'lab.sm.data.shared.female',
@@ -110,7 +110,7 @@ export const category0: ICategory = {
     description: 'lab.sm.data.c0.q7.description',
     hardcoreness: HardcorenessMetrics.UNAVAILABLE,
     bianswer: true,
-    uncomparable: true,
+    local: true,
     label: 'lab.sm.data.c0.q7.label',
   }],
 };
