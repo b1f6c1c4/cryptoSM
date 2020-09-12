@@ -71,28 +71,6 @@ export const category3: ICategory = {
       'M:0.4': [ 0 ],
     },
   }, {
-    questionId: 4,
-    type: MULTIPLE_CHOICE,
-    title: 'lab.sm.data.c3.q4.title',
-    description: 'lab.sm.data.c3.q4.description',
-    hardcoreness: HardcorenessMetrics.MILD,
-    bianswer: false,
-    choices: [
-      'lab.sm.data.c3.q4.a0',
-      'lab.sm.data.c3.q4.a1',
-      'lab.sm.data.c3.q4.a2',
-      'lab.sm.data.c3.q4.a3',
-      'lab.sm.data.c3.q4.a4',
-      'lab.sm.data.c3.q4.a5',
-    ],
-    uncomparable: true,
-    dependencies: {
-      '3.0': [ 0, 1, 2 ],
-      '3.2': [ 0, 1, 2 ],
-      '3.3.M': [ 0, 1, 2 ],
-      '0.4': [ 0 ],
-    },
-  }, {
     questionId: 5,
     type: MULTIPLE_CHOICE,
     title: 'lab.sm.data.c3.q5.title',
@@ -126,27 +104,6 @@ export const category3: ICategory = {
     dependencies: {
       '3.0': [ 0, 1, 2 ],
       '3.2': [ 0, 1, 2 ],
-    },
-  }, {
-    questionId: 7,
-    type: MULTIPLE_CHOICE,
-    title: 'lab.sm.data.c3.q7.title',
-    description: 'lab.sm.data.c3.q7.description',
-    hardcoreness: HardcorenessMetrics.MILD,
-    bianswer: false,
-    uncomparable: true,
-    choices: [
-      'lab.sm.data.c3.q7.a0',
-      'lab.sm.data.c3.q7.a1',
-      'lab.sm.data.c3.q7.a2',
-      'lab.sm.data.c3.q7.a3',
-      'lab.sm.data.c3.q7.a4',
-      'lab.sm.data.c3.q7.a5',
-    ],
-    dependencies: {
-      '3.0': [ 0, 1, 2 ],
-      '3.2': [ 0, 1, 2 ],
-      '3.6.M': [ 0, 1, 2 ],
     },
   }, {
     questionId: 8,
