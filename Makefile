@@ -5,7 +5,7 @@ CFILES=$(shell find src/ -type f -name '*.c')
 HFILES=$(shell find src/ -type f -name '*.h')
 HPPFILES=$(wildcard src/wasm/*.hpp)
 
-all: bin/garble.js
+all: bin/garble.js bin/garble-patch.js
 
 define c-to-obj
 
@@ -32,6 +32,10 @@ bin/garble.js: src/wasm/main.post.js obj/emcc/main.o obj/emcc/lib.a
 	em++ -o $@ --post-js $^ \
 		-s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall"]' \
 		-s DEMANGLE_SUPPORT=1
+
+bin/garble-patch.js: bin/garble.js
+	echo 'var Module = self.Module;' > bin/garble-patch.js
+	cat $^ >> $@
 
 clean:
 	rm -rf bin/ obj/

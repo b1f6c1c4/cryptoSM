@@ -11,7 +11,12 @@ import 'typeface-poiret-one';
 import 'roboto-fontface';
 import 'notosans-fontface';
 
-const getEncodedAnswers = () => window.localStorage.getItem('encodedAnswers');
+const theEncodedAnswers = window.localStorage.getItem('encodedAnswers');
+const theEncodedComparison = window.localStorage.getItem('encodedComparison');
+
+const init = {};
+if (theEncodedAnswers) init.answers = decode(theEncodedAnswers as string);
+if (theEncodedComparison) init.comparison = JSON.parse(theEncodedComparison);
 
 class App extends React.Component {
   public shouldComponentUpdate() {
@@ -19,20 +24,24 @@ class App extends React.Component {
   }
   private store = createStore(
     reducers,
-    getEncodedAnswers() === null
-      ? {}
-      : {
-        answers: decode(getEncodedAnswers() as string),
-      },
+    init,
     ((window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose)(
       applyMiddleware(store => next => action => {
         const previousAnswers = (store.getState() as IRootState).answers;
+        const previousComparison = (store.getState() as IRootState).comparison;
         const result = next(action);
         const currentAnswers = (store.getState() as IRootState).answers;
+        const currentComparison = (store.getState() as IRootState).comparison;
         if (currentAnswers !== previousAnswers) {
           window.localStorage.setItem(
             'encodedAnswers',
             encode(currentAnswers),
+          );
+        }
+        if (currentComparison !== previousComparison) {
+          window.localStorage.setItem(
+            'encodedComparison',
+            JSON.stringify(currentComparison),
           );
         }
       },

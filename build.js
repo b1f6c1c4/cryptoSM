@@ -14,7 +14,7 @@ async function makeBundle() {
   const html = shell.cat('art/html_code.html').replace(/\n/g, '');
   shell.sed('-i', /<title>/, `${html}<title>`, 'dist/*.html');
   shell.cp('art/*', 'dist/');
-  shell.cp('-r', 'bin/', 'dist/');
+  shell.cp('bin/garble.{js,wasm}', 'dist/');
   shell
     .echo('https://crypto-sm.netlify.com/* https://sm.b1f6c1c4.info/:splat 301!')
     .to('dist/_redirects');

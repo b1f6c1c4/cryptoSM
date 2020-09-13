@@ -100,6 +100,22 @@ public:
 		_alice.receive(in, out);
 	}
 
+	EMSCRIPTEN_KEEPALIVE
+	void serialize(unsigned char *out)
+	{
+		for (size_t i{ 0 }; i < sizeof(alice_t); i++)
+			out[i] = reinterpret_cast<unsigned char *>(this)[i];
+	}
+
+	EMSCRIPTEN_KEEPALIVE
+	static auto deserialize(const unsigned char *in)
+	{
+		auto ptr = reinterpret_cast<unsigned char *>(malloc(sizeof(alice_t)));
+		for (size_t i{ 0 }; i < sizeof(alice_t); i++)
+			ptr[i] = in[i];
+		return reinterpret_cast<alice_t *>(ptr);
+	}
+
 private:
 	simple_min_alice<M> _alice;
 };
@@ -130,13 +146,45 @@ public:
 		return _bob.evaluate(in);
 	}
 
+	EMSCRIPTEN_KEEPALIVE
+	void serialize(unsigned char *out)
+	{
+		for (size_t i{ 0 }; i < sizeof(bob_t); i++)
+			out[i] = reinterpret_cast<unsigned char *>(this)[i];
+	}
+
+	EMSCRIPTEN_KEEPALIVE
+	static auto deserialize(const unsigned char *in)
+	{
+		auto ptr = reinterpret_cast<unsigned char *>(malloc(sizeof(bob_t)));
+		for (size_t i{ 0 }; i < sizeof(bob_t); i++)
+			ptr[i] = in[i];
+		return reinterpret_cast<bob_t *>(ptr);
+	}
+
 private:
 	simple_min_bob<M> _bob;
 };
 
+template <size_t M>
+EMSCRIPTEN_KEEPALIVE
+constexpr size_t alice_size()
+{
+	return sizeof(alice_t<M>);
+}
+
+template <size_t M>
+EMSCRIPTEN_KEEPALIVE
+constexpr size_t bob_size()
+{
+	return sizeof(bob_t<M>);
+}
+
 #define MAKE(M) \
 	template class alice_t<M>; \
 	template class bob_t<M>; \
+	template size_t alice_size<M>(); \
+	template size_t bob_size<M>(); \
 	template size_t garble_size<M>(); \
 	template size_t inquiry_size<M>(); \
 	template size_t receive_size<M>();

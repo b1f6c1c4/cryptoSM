@@ -48,6 +48,12 @@ Module.onRuntimeInitialized = function () {
     var obj;
 
     // template <size_t M>
+    // constexpr size_t alice_size<M>()
+    var alice_size = Module.ccall('_Z10alice_sizeILm' + m + 'EEmv', 'number', []);
+    // template <size_t M>
+    // constexpr size_t bob_size<M>()
+    var bob_size = Module.ccall('_Z8bob_sizeILm' + m + 'EEmv', 'number', []);
+    // template <size_t M>
     // size_t garble_size<M>()
     var garble_size = Module.ccall('_Z11garble_sizeILm' + m + 'EEmv', 'number', []);
     // template <size_t M>
@@ -92,6 +98,23 @@ Module.onRuntimeInitialized = function () {
       Module.ccall('_ZN7alice_tILm' + m + 'EE6removeEPS0_', 'void', ['number'], [this.self]);
     };
 
+    Alice.prototype.serialize = function () {
+      var self = this.self;
+      return withBuffer(alice_size, function (buffOut) {
+        Module.ccall('_ZN7alice_tILm' + m + 'EE9serializeEPh', 'null', ['number', 'number'], [self, buffOut.byteOffset]);
+        return toHex(buffOut);
+      });
+    };
+
+    Alice.deserialize = function (input) {
+      return withBuffer(alice_size, function (buffIn) {
+        fromHex(input, buffIn);
+        var res = Object.create(Alice.prototype);
+        res.self = Module.ccall('_ZN7alice_tILm' + m + 'EE11deserializeEPKh', 'null', ['number', 'number'], [self, buffIn.byteOffset]);
+        return res;
+      });
+    };
+
     function Bob(b) {
       // template <size_t M>
       // auto bob_t<M>::create(size_t)
@@ -125,6 +148,23 @@ Module.onRuntimeInitialized = function () {
       // template <size_t M>
       // void bob_t<M>::remove(bob_t *)
       Module.ccall('_ZN5bob_tILm' + m + 'EE6removeEPS0_', 'void', ['number'], [this.self]);
+    };
+
+    Bob.prototype.serialize = function () {
+      var self = this.self;
+      return withBuffer(bob_size, function (buffOut) {
+        Module.ccall('_ZN7bob_tILm' + m + 'EE9serializeEPh', 'null', ['number', 'number'], [self, buffOut.byteOffset]);
+        return toHex(buffOut);
+      });
+    };
+
+    Bob.deserialize = function (input) {
+      return withBuffer(bob_size, function (buffIn) {
+        fromHex(input, buffIn);
+        var res = Object.create(Bob.prototype);
+        res.self = Module.ccall('_ZN5bob_tILm' + m + 'EE11deserializeEPKh', 'null', ['number', 'number'], [self, buffIn.byteOffset]);
+        return res;
+      });
     };
 
     obj = {};
