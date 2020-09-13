@@ -35,10 +35,6 @@ interface IQuestionBase {
    */
   readonly bianswer: boolean;
   /**
-   * Whether its answer is only used locally but not in comparing with others'.
-   */
-  readonly local?: true;
-  /**
    * When this question should be displayed. Optional.
    *
    * For example, the following value:

@@ -4,9 +4,6 @@ lab.sm.data.shared:
   cannot: 不能
   have: 有
   haveNot: 沒有
-  male: 男
-  female: 女
-  other: 其他
   ua0: 非常感興趣
   ua1: 感興趣
   ua2: 一般
