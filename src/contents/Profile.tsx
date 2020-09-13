@@ -323,15 +323,6 @@ class ProfileUW extends React.PureComponent {
           <SimpleFormat>
             { t('lab.sm.profile.finish.desc.before') }
           </SimpleFormat>
-          <p>
-            { t('lab.sm.profile.finish.group.desc.before') }
-            <a
-              target='_blank'
-              href={t('lab.sm.profile.finish.group.link')}
-              children={t('lab.sm.profile.finish.group.link')}
-            />
-            { t('lab.sm.profile.finish.group.desc.after') }
-          </p>
           <SimpleFormat>
             { t('lab.sm.profile.finish.desc.after') }
           </SimpleFormat>
