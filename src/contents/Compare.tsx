@@ -11,11 +11,20 @@ import { SimpleFormat } from '../components/SimpleFormat';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import { Line } from 'rc-progress';
 import { decode } from '../persistence';
 import { IAnswersState } from '../reducers/answers';
 import { IRootState } from '../RootState';
 import { smPrepare, smDiscuss } from '../sm';
 import download from '../download';
+
+const jsWorker = `
+onmessage = function(e) {
+  var data = e.data;
+  var res = data.fun.apply(data.obj, data.args);
+  postMessage(res);
+}
+`;
 
 let Module;
 if (process.env.NODE_ENV === 'production') {
@@ -49,46 +58,82 @@ interface ICompareFormProps {
   readonly startCompare: typeof createStartCompareAction;
 }
 interface ICompareFormState {
+  readonly worker: unknown;
+  readonly answers: Array<number> | null;
+  readonly insts: Array<unknown> | null;
+  readonly microDone: number | null;
   readonly step: number;
-  readonly isAlice: boolean;
-  readonly gc: number;
   readonly output: string;
-  readonly alice0: any;
 }
 class CompareFormUW extends React.PureComponent<
   ICompareFormProps,
   ICompareFormState
 > {
   public state = {
+    worker: null,
+    answers: null,
+    insts: null,
+    microDone: null,
     step: 0,
-    gc: 0,
     output: '',
-    alice0: null,
   };
-  private onClickAliceStart = () => {
-    const res = smPrepare(this.props.currentAnswers, false);
-    const os = [];
-    let output = '';
-    res.forEach((v) => {
-      const o = new Module.Alice4(v);
-      output += o.garble();
-      os.push(o);
-    });
+  private onTick = (d: string | null) => {
+    let { worker, answers, insts, microDone, step, output } = this.state;
+    if (d) {
+      microDone++;
+      output += d;
+      if (microDone === answers.length) {
+        switch (step) {
+          case 10: {
+            this.setState({
+              microDone,
+              step: 11,
+              output,
+            });
+            break;
+          }
+        }
+        return;
+      }
+    }
+    switch (step) {
+      case 10: {
+        const v = answers[microDone];
+        const obj = new Module.Alice4(v);
+        insts.push(obj);
+        worker.postMessage({ obj, fun: obj.garble, args: [] });
+        break;
+      }
+    }
     this.setState({
-      step: 11,
-      gc: os,
+      insts,
+      microDone,
       output,
     });
   }
-  private onClickBobStart = () => {
-    const res = smPrepare(this.props.currentAnswers, true);
-    const os = [];
-    res.forEach((v) => {
-      os.push(new Module.Bob4(v));
-    });
+  private onClickAliceStart = () => {
+    const worker = new Worker(jsWorker);
+    worker.onmessage = ({ data }) => { this.onTick(data); };
+    const answers = smPrepare(this.props.currentAnswers, false);
     this.setState({
+      worker,
+      answers,
+      insts: [],
+      microDone: 0,
+      step: 10,
+      output: '',
+    }, () => { this.onTick(); });
+  }
+  private onClickBobStart = () => {
+    const worker = new Worker(jsWorker);
+    worker.onmessage = ({ data }) => { this.onTick(data); };
+    const answers = smPrepare(this.props.currentAnswers, true);
+    this.setState({
+      worker,
+      answers,
+      insts: answers.map((v) => new Module.Bob4(v));
+      microDone: null,
       step: 21,
-      gc: os,
       output: '',
     });
   }
@@ -186,8 +231,9 @@ class CompareFormUW extends React.PureComponent<
     fr.readAsText(f);
   };
   public render() {
+    const { answers, microDone, step } = this.state;
     const t = this.props.t;
-    switch (this.state.step) {
+    switch (step) {
       case 0:
         return (
           <div>
@@ -201,6 +247,18 @@ class CompareFormUW extends React.PureComponent<
             <LinkButton
               children={t('lab.sm.compare.bob.start')}
               onClick={ this.onClickBobStart }
+            />
+          </div>
+        );
+      case 10:
+        return (
+          <div>
+            <SimpleFormat className="warning">
+              {t('lab.sm.compare.alice.slow')}
+            </SimpleFormat>
+            <Line
+              percent={1 + microDone / answers.length * 99}
+              strokeWidth="4"
             />
           </div>
         );
