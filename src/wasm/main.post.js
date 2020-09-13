@@ -153,7 +153,7 @@ Module.onRuntimeInitialized = function () {
     Bob.prototype.serialize = function () {
       var self = this.self;
       return withBuffer(bob_size, function (buffOut) {
-        Module.ccall('_ZN7bob_tILm' + m + 'EE9serializeEPh', 'null', ['number', 'number'], [self, buffOut.byteOffset]);
+        Module.ccall('_ZN5bob_tILm' + m + 'EE9serializeEPh', 'null', ['number', 'number'], [self, buffOut.byteOffset]);
         return toHex(buffOut);
       });
     };

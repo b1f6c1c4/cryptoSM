@@ -82,7 +82,7 @@ lab.sm:
     download: 下载文件
     show: 查看最终计算结果
     table:
-      clear: 清除对比结果
+      clear: 全部重新开始
       empty: 未填写
       basic: 基本信息
       myInfo: 我
@@ -111,7 +111,7 @@ lab.sm:
       您可以将之前使用「备份数据」获得的 base64 字符串导入。请注意，还原数据将会覆盖您目前填写的所有信息。此操作不可逆。
   reset:
     confirm: 您确定要清空当前填写的所有信息吗？(请再次点击)
-    restore: 清空所有信息
+    reset: 清空所有信息
     successful: 清空成功
     title: 清空数据
     desc: >-

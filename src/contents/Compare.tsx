@@ -130,7 +130,7 @@ class CompareFormUW extends React.PureComponent<
         case 'bob-init':
           worker.postMessage({
             id: micros,
-            cmd: 'alice-garble',
+            cmd: nextStep,
             v: answers[micros],
           });
           break;
