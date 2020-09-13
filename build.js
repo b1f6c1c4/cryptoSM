@@ -13,7 +13,6 @@ async function makeBundle() {
   await bundler.bundle();
   const html = shell.cat('art/html_code.html').replace(/\n/g, '');
   shell.sed('-i', /<title>/, `${html}<title>`, 'dist/*.html');
-  shell.sed('-i', /Workaround/, '', 'dist/*.html');
   shell.cp('art/*', 'dist/');
   shell.cp('-r', 'bin/', 'dist/');
   shell
