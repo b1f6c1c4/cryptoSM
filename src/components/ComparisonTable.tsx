@@ -15,7 +15,6 @@ import { IAnswersState } from '../reducers/answers';
 import { LinkButton } from './LinkButton';
 
 interface IComparisonTableProps {
-  readonly basic: boolean;
   readonly my: IAnswersState;
   readonly partner: IAnswersState;
   readonly reversed: boolean;
@@ -66,57 +65,35 @@ class ComparisonTableUW extends React.PureComponent<
   }
   private renderRows(): Array<React.ReactNode> {
     const t = this.props.t;
-    const basic = this.props.basic;
-    const lAnswers = basic ? { [0]: this.props.my } : this.props.my;
-    const rAnswers = basic ? { [0]: this.props.partner } : this.props.partner;
+    const lAnswers = this.props.my;
+    const rAnswers = this.props.partner;
     const results: Array<React.ReactNode> = [];
     const showAll = this.state.showAll;
     for (const category of categories) {
       const cid = category.categoryId;
-      if (basic && cid) continue;
-      if (!basic && !cid) continue;
-
       for (const question of category.questions) {
         const qid = question.questionId;
 
         let lAnswerRaw: string | number | null = null;
         let rAnswerRaw: string | number | null = null;
 
-        // null = empty
-        // undefined = unavailable
         let lAnswer: string | null | undefined;
         let rAnswer: string | null | undefined;
 
-        if (basic) {
-          if (question.bianswer) {
-            continue; // TODO
-          } else {
-            lAnswer = this.convertAnswerToSchrodinger(
-              question,
-              lAnswerRaw = (accessAnswerById(lAnswers, cid, qid) as any),
-            );
-            rAnswer = this.convertAnswerToSchrodinger(
-              question,
-              rAnswerRaw = (accessAnswerById(rAnswers, cid, qid) as any),
-            );
-          }
-        } else {
-          if (question.bianswer) {
-            const id = this.props.reversed ? 1 : 0;
-            lAnswer = this.convertAnswerToSchrodinger(
-              question,
-              lAnswerRaw = (accessAnswerById(rAnswers, cid, qid) as any)[id],
-            );
-            if (lAnswer === null) lAnswer = undefined;
-            rAnswer = this.convertAnswerToSchrodinger(
-              question,
-              rAnswerRaw = (accessAnswerById(rAnswers, cid, qid) as any)[1 - id],
-            );
-            if (rAnswer === null) rAnswer = undefined;
-          } else {
-            continue; // TODO
-          }
+        if (!question.bianswer) {
+          continue;
         }
+        const id = this.props.reversed ? 1 : 0;
+        lAnswer = this.convertAnswerToSchrodinger(
+          question,
+          lAnswerRaw = (accessAnswerById(rAnswers, cid, qid) as any)[id],
+        );
+        if (lAnswer === null) lAnswer = undefined;
+        rAnswer = this.convertAnswerToSchrodinger(
+          question,
+          rAnswerRaw = (accessAnswerById(rAnswers, cid, qid) as any)[1 - id],
+        );
+        if (rAnswer === null) rAnswer = undefined;
 
         const shouldHideIfNotShowAll = lAnswer === undefined && rAnswer === undefined;
 

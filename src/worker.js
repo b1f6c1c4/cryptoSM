@@ -1,5 +1,3 @@
-import { deflate, inflate } from 'pako';
-
 let loader;
 const loadModule = () => {
   if (loader) return loader;
@@ -33,14 +31,16 @@ const loadModule = () => {
       garble = () => '--garble--';
       receive = () => '--receive' + this.v;
       remove = () => {};
-      serialize = () => ''+v;
+      serialize = () => ''+this.v;
+      static deserialize = (v) => new Alice4(+v);
     }
     class Bob4 {
       constructor(v) { this.v = v; }
       inquiry = () => '--inquiry-';
       evaluate = (r) => Math.min(this.v, parseInt(r.substr(9), 10));
       remove = () => {};
-      serialize = () => ''+v;
+      serialize = () => ''+this.v;
+      static deserialize = (v) => new Bob4(+v);
     }
     return loader = Promise.resolve({
       garbleSize4: 5,
@@ -58,6 +58,7 @@ onmessage = function({ data }) {
   if (process.env.NODE_ENV !== 'production') {
     console.log('Worker message:', data);
   }
+  const t0 = +new Date();
   loadModule().then((Module) => {
     let res;
     switch (data.cmd) {
@@ -66,10 +67,9 @@ onmessage = function({ data }) {
         insts[data.id] = new Module.Alice4(data.v);
         res = insts[data.id].garble();
         break;
-      case 'bob-prepare':
+      case 'bob-init':
         if (insts[data.id]) insts[data.id].remove();
         insts[data.id] = new Module.Bob4(data.v);
-        res = null;
         break;
       case 'bob-inquiry':
         res = [data.str.substr(Module.garbleSize4 * 2)];
@@ -87,26 +87,35 @@ onmessage = function({ data }) {
       case 'remove':
         insts.forEach((x) => x.remove());
         insts = [];
-        res = null;
         break;
       case 'serialize':
-        res = self.btoa(deflate(
-          insts.map((x) => x.serialize()),
-          { to: 'string' },
-        ));
+        res = JSON.stringify(insts.map((x) => x.serialize()));
         break;
       case 'alice-deserialize':
-        insts = JSON.parse(inflate(self.atob(data.str))).map((s) => Alice.deserialize(s));
+        insts = JSON.parse(data.str).map((s) => Module.Alice4.deserialize(s));
         res = null;
         break;
       case 'bob-deserialize':
-        insts = JSON.parse(inflate(self.atob(data.str))).map((s) => Bob.deserialize(s));
+        insts = JSON.parse(data.str).map((s) => Module.Bob4.deserialize(s));
         res = null;
         break;
     }
     if (process.env.NODE_ENV !== 'production') {
       console.log('Worker done:', res);
     }
-    postMessage(res);
+    const t1 = +new Date();
+    let tmin = 0;
+    if (process.env.NODE_ENV === 'production') {
+      tmin = 20;
+    } else if (process.env.NODE_ENV === 'preview') {
+      tmin = 20;
+    }
+    if (t1 > t0 + tmin) {
+      postMessage(res);
+    } else {
+      setTimeout(postMessage, tmin - (t1 - t0), res);
+    }
+  }).catch((e) => {
+    console.error(e);
   });
 };

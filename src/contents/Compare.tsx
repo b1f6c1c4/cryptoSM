@@ -1,16 +1,18 @@
 import {
+  createInitCompareAction,
+  createStepCompareAction,
+  createFinishCompareAction,
   createClearCompareAction,
-  createSetCompareFormAction,
-  createStartCompareAction,
 } from '../actions/compare';
 import { Card } from '../components/Card';
 import { ComparisonTable } from '../components/ComparisonTable';
-import { InputField } from '../components/InputField';
 import { LinkButton } from '../components/LinkButton';
 import { SimpleFormat } from '../components/SimpleFormat';
 import * as React from 'react';
 import { connect } from 'react-redux';
+import _get from 'lodash/get';
 import { withTranslation } from 'react-i18next';
+import memoizeOne from 'memoize-one';
 import { Line } from 'rc-progress';
 import { decode } from '../persistence';
 import { IAnswersState } from '../reducers/answers';
@@ -18,408 +20,361 @@ import { IRootState } from '../RootState';
 import { smPrepare, smDiscuss } from '../sm';
 import download from '../download';
 
-let Module;
-  ({ Module } = window);
-} else {
-}
-
 interface ICompareFormProps {
-  readonly formSValue: string;
-  readonly formMValue: string;
   readonly currentAnswers: IAnswersState;
-  readonly startCompare: typeof createStartCompareAction;
+  readonly resultAnswers: IAnswersState;
+  readonly role: string | null;
+  readonly step: string | null;
+  readonly crypto: string | null;
+  readonly output: string | null;
+  readonly initCompare: typeof createInitCompareAction;
+  readonly stepCompare: typeof createStepCompareAction;
+  readonly finishCompare: typeof createFinishCompareAction;
 }
 interface ICompareFormState {
-  readonly worker: unknown;
+  readonly nextStep: string | null;
   readonly answers: Array<number> | null;
-  readonly microDone: number;
-  readonly step: number;
-  readonly input: string;
-  readonly output: string;
+  readonly worker: unknown;
+  readonly micros: number;
+  readonly restInput: string;
+  readonly partialOutput: string;
 }
 class CompareFormUW extends React.PureComponent<
-ICompareFormProps,
-ICompareFormState
+  ICompareFormProps,
+  ICompareFormState
 > {
   public state = {
-    worker: null,
+    nextStep: null,
     answers: null,
-    microDone: 0,
-    step: 0,
-    input: '',
-    output: '',
+    worker: new Worker('../worker.js'),
+    micros: 0,
+    restInput: '',
+    partialOutput: '',
   };
-  private onTick = (d: any) => {
-    let { worker, answers, insts, microDone, step, input, output } = this.state;
-    if (d !== undefined) {
-      microDone++;
-      switch (step) {
-        case 105:
-          output += d;
-          if (microDone === answers.length) {
-            this.setState({
-              microDone,
-              step: 11,
-              output,
-            });
-            return;
-          }
-          break;
-        case 205:
-          output += d;
-          if (microDone === answers.length) {
-            this.setState({
-              microDone,
-              step: 21,
-              output,
-            });
-            return;
-          }
-          break;
-        case 215:
-          input = d[0];
-          output += d[1];
-          if (microDone === answers.length) {
-            this.setState({
-              microDone,
-              step: 22,
-              input,
-              output,
-            });
-            return;
-          }
-          break;
-        case 115:
-          input = d[0];
-          output += d[1];
-          if (microDone === answers.length) {
-            this.setState({
-              microDone,
-              step: 12,
-              input,
-              output,
-            });
-            return;
-          }
-          break;
-        case 225:
-          input = d[0];
-          output.push(d[1]);
-          if (microDone === answers.length) {
-            this.setState({
-              microDone,
-              step: 23,
-              input,
-              output: smDiscuss(output),
-            });
-            return;
-          }
-          break;
+  public componentDidMount() {
+    const { role, crypto, currentAnswers } = this.props;
+    const { worker } = this.state;
+    worker.onmessage = ({ data }) => { this.doneStuff(data); };
+    if (crypto) {
+      if (role === 'alice') {
+        worker.postMessage({ cmd: 'alice-deserialize', str: crypto });
+      } else {
+        worker.postMessage({ cmd: 'bob-deserialize', str: crypto });
       }
     }
-    switch (step) {
-      case 105: {
-        const v = answers[microDone];
-        worker.postMessage({ id: microDone, cmd: 'alice-garble', v });
-        break;
-      }
-      case 205: {
-        const v = answers[microDone];
-        worker.postMessage({ id: microDone, cmd: 'bob-prepare', v });
-        break;
-      }
-      case 215: {
-        worker.postMessage({ id: microDone, cmd: 'bob-inquiry', str: input });
-        break;
-      }
-      case 115: {
-        worker.postMessage({ id: microDone, cmd: 'alice-receive', str: input });
-        break;
-      }
-      case 225: {
-        worker.postMessage({ id: microDone, cmd: 'bob-evaluate', str: input });
-        break;
-      }
-    }
-    this.setState({
-      microDone,
-      output,
-    });
-  }
-  private onClickAliceStart = () => {
-    const worker = new Worker('../worker.js');
-    worker.onmessage = ({ data }) => { this.onTick(data); };
-    const answers = smPrepare(this.props.currentAnswers, false);
-    this.setState({
-      worker,
-      answers,
-      microDone: 0,
-      step: 105,
-      output: '',
-    }, () => { this.onTick(); });
-  }
-  private onClickBobStart = () => {
-    const worker = new Worker('../worker.js');
-    worker.onmessage = ({ data }) => { this.onTick(data); };
-    const answers = smPrepare(this.props.currentAnswers, true);
-    this.setState({
-      worker,
-      answers,
-      microDone: 0,
-      step: 205,
-      output: '',
-    }, () => { this.onTick(); });
-  }
-  private handleDownload = () => {
-    const { step, output } = this.state;
-    switch (step) {
-      case 11:
-        download('1-alice-to-bob', output);
-      break;
-      case 22:
-        download('2-bob-to-alice', output);
-      break;
-      case 12:
-        download('3-alice-to-bob', output);
-      break;
-      case 23:
-        download('4-bob-to-alice', JSON.stringify(output));
-      break;
+    if (role !== null) {
+      this.setState({
+        answers: smPrepare(currentAnswers, role === 'bob'),
+      });
     }
   }
-  private onClickNext = () => {
-    const { step } = this.state;
-    switch (step) {
-      case 21:
-        this.setState({ step: step + 1, output: '' });
-      break;
-      case 23: {
-        const { output, alice0 } = this.state;
-        this.props.startCompare(output, undefined, true);
-        break;
-      }
+  public componentWillUnmount() {
+    const { worker } = this.state;
+    if (worker) {
+      worker.terminate();
     }
-    private handleUpload = ({ target }) => {
-      const { files: [f] } = target;
-      if (!f) {
-        return;
-      }
-      const fr = new global.FileReader();
-      fr.onload = ({ target: { result } }) => {
-        const { step, output } = this.state;
-        switch (this.state.step) {
-          case 21: {
-            this.setState({
-              microDone: 0,
-              step: 215,
-              input: result,
-              output: '',
-            }, () => { this.onTick(); });
-            break;
-          }
-          case 11: {
-            this.setState({
-              microDone: 0,
-              step: 115,
-              input: result,
-              output: '',
-            }, () => { this.onTick(); });
-            break;
-          }
-          case 22: {
-            this.setState({
-              microDone: 0,
-              step: 225,
-              input: result,
-              output: [],
-            }, () => { this.onTick(); });
-            break;
-          }
-          case 12: {
-            target.value = null;
-            const { output } = JSON.parse(result);
-            this.props.startCompare(output, undefined, false);
-            break;
-          }
+  }
+  private doneStuff = (d: any) => {
+    const { answers, micros, restInput, partialOutput } = this.state;
+    switch (this.state.nextStep) {
+      case 'alice-garble':
+        if (micros < answers.length) {
+          this.setState({
+            micros: micros + 1,
+            partialOutput: partialOutput + d,
+          }, this.nextStuff);
+        } else {
+          this.props.initCompare(true, d, partialOutput);
         }
-      };
-      fr.readAsText(f);
+        break;
+      case 'bob-init':
+        if (micros < answers.length) {
+          this.setState({
+            micros: micros + 1,
+          }, this.nextStuff);
+        } else {
+          this.props.initCompare(false, d);
+        }
+        break;
+      case 'bob-inquiry':
+      case 'alice-receive':
+        if (micros < answers.length) {
+          this.setState({
+            micros: micros + 1,
+            restInput: d[0],
+            partialOutput: partialOutput + d[1],
+          }, this.nextStuff);
+        } else {
+          this.props.stepCompare(d, partialOutput);
+        }
+        break;
+      case 'bob-evaluate':
+        partialOutput.push(d[1]);
+        if (micros < answers.length) {
+          this.setState({
+            micros: micros + 1,
+            restInput: d[0],
+            partialOutput,
+          }, this.nextStuff);
+        } else {
+          this.props.finishCompare(smDiscuss(partialOutput));
+        }
+        break;
+    }
+  }
+  private nextStuff = () => {
+    let { answers, nextStep, worker, micros, restInput } = this.state;
+    if (micros < answers.length) {
+      switch (nextStep) {
+        case 'alice-garble':
+        case 'bob-init':
+          worker.postMessage({
+            id: micros,
+            cmd: 'alice-garble',
+            v: answers[micros],
+          });
+          break;
+        default:
+          worker.postMessage({
+            id: micros,
+            cmd: nextStep,
+            str: restInput,
+          });
+          break;
+      }
+      this.setState({ micros });
+    } else {
+      worker.postMessage({ cmd: 'serialize' });
+    }
+  }
+  private onClickStart = (isAlice: boolean) => {
+    this.setState({
+      nextStep: isAlice ? 'alice-garble' : 'bob-init',
+      answers: smPrepare(this.props.currentAnswers, !isAlice),
+      micros: 0,
+      partialOutput: '',
+    }, () => { this.nextStuff(); });
+  }
+  private onClickAliceStart = () => { this.onClickStart(true); }
+  private onClickBobStart = () => { this.onClickStart(false); }
+  private handleDownload = () => {
+    const { step, output, resultAnswers } = this.props;
+    switch (step) {
+      case 'garble': download('1-alice-to-bob', output); break;
+      case 'inquiry': download('2-bob-to-alice', output); break;
+      case 'receive': download('3-alice-to-bob', output); break;
+      case 'done': download('4-bob-to-alice', JSON.stringify(resultAnswers)); break;
+    }
+  }
+  private handleUpload = ({ target }) => {
+    const { files: [f] } = target;
+    if (!f) {
+      return;
+    }
+    const fr = new global.FileReader();
+    fr.onload = ({ target: { result } }) => {
+      target.value = '';
+      const { step, output } = this.state;
+      switch (this.props.step) {
+        case 'init':
+          this.setState({
+            nextStep: 'bob-inquiry',
+            micros: 0,
+            restInput: result,
+            partialOutput: '',
+          }, () => { this.nextStuff(); });
+          break;
+        case 'garble':
+          this.setState({
+            nextStep: 'alice-receive',
+            micros: 0,
+            restInput: result,
+            partialOutput: '',
+          }, () => { this.nextStuff(); });
+          break;
+        case 'inquiry':
+          this.setState({
+            nextStep: 'bob-evaluate',
+            micros: 0,
+            restInput: result,
+            partialOutput: [],
+          }, () => { this.nextStuff(); });
+          break;
+        case 'receive':
+          this.props.finishCompare(JSON.parse(result));
+      }
     };
-    public render() {
-      const { answers, microDone, step } = this.state;
-      const t = this.props.t;
-      switch (step) {
-        case 0:
-          return (
-            <div>
-              <SimpleFormat className="warning">
-              {t('lab.sm.compare.alice.slow')}
-            </SimpleFormat>
-            <LinkButton
+    fr.readAsText(f);
+  }
+  public render() {
+    const { answers, nextStep, micros, partialOutput } = this.state;
+    const { t, role, step, output } = this.props;
+    const d = [];
+    if (role === null) {
+      d.push((
+        <SimpleFormat key="warn" className="warning">
+          {t('lab.sm.compare.alice.slow')}
+        </SimpleFormat>
+      ));
+      if (nextStep === null) {
+        d.push((
+          <LinkButton
+            key="btnA"
             children={t('lab.sm.compare.alice.start')}
             onClick={ this.onClickAliceStart }
-            />
-            <LinkButton
+          />
+        ));
+        d.push((
+          <LinkButton
+            key="btnB"
             children={t('lab.sm.compare.bob.start')}
             onClick={ this.onClickBobStart }
-            />
-          </div>
-        );
-        case 105:
-        case 115:
-          return (
-            <div>
-              <SimpleFormat className="warning">
-              {t('lab.sm.compare.alice.slow')}
-            </SimpleFormat>
-            <Line
-            percent={1 + microDone / answers.length * 99}
-            />
-          </div>
-        );
-        case 205:
-        case 215:
-        case 225:
-          return (
-            <div>
-              <Line
-              percent={1 + microDone / answers.length * 99}
-              />
-            </div>
-        );
-        case 11:
-          return (
-            <div>
-              <SimpleFormat className="warning">
-              {t('lab.sm.compare.alice.slow')}
-            </SimpleFormat>
-            <SimpleFormat>
-            {t('lab.sm.compare.alice.send1get2')}
-          </SimpleFormat>
-          <LinkButton
-          children={t('lab.sm.compare.download')}
-          onClick={ this.handleDownload }
           />
-          <input type="file" onChange={this.handleUpload} />
-        </div>
-        );
-        case 21:
-          return (
-            <div>
-              <SimpleFormat>
-              {t('lab.sm.compare.bob.get1')}
-            </SimpleFormat>
-            <input type="file" onChange={this.handleUpload} />
-          </div>
-        );
-        case 12:
-          return (
-            <div>
-              <SimpleFormat className="finished">
-              {t('lab.sm.compare.alice.slow')}
-            </SimpleFormat>
-            <SimpleFormat className="finished">
-            {t('lab.sm.compare.alice.send1get2')}
-          </SimpleFormat>
-          <SimpleFormat>
-          {t('lab.sm.compare.alice.send3get4')}
-        </SimpleFormat>
-        <LinkButton
-        children={t('lab.sm.compare.download')}
-        onClick={ this.handleDownload }
-        />
-        <input type="file" onChange={this.handleUpload} />
-      </div>
-        );
-        case 22:
-          return (
-            <div>
-              <SimpleFormat className="finished">
-              {t('lab.sm.compare.bob.get1')}
-            </SimpleFormat>
+        ));
+      }
+    } else {
+      const dd = [];
+      if (role === 'alice') {
+        dd.push((
+          <li key="a12" className={({
+            garble: 'current',
+            receive: 'finished',
+            done: 'finished',
+          })[step]}>
             <SimpleFormat>
-            {t('lab.sm.compare.bob.send2get3')}
-          </SimpleFormat>
-          <LinkButton
-          children={t('lab.sm.compare.download')}
-          onClick={ this.handleDownload }
-          />
-          <input type="file" onChange={this.handleUpload} />
-        </div>
-        );
-        case 23:
-          return (
-            <div>
-              <SimpleFormat className="finished">
+              {t('lab.sm.compare.alice.send1get2')}
+            </SimpleFormat>
+          </li>
+        ));
+        dd.push((
+          <li key="a34" className={({
+            receive: 'current',
+            done: 'finished',
+          })[step]}>
+            <SimpleFormat>
+              {t('lab.sm.compare.alice.send3get4')}
+            </SimpleFormat>
+          </li>
+        ));
+      } else {
+        dd.push((
+          <li key="b1" className={({
+            init: 'current',
+            inquiry: 'finished',
+            done: 'finished',
+          })[step]}>
+            <SimpleFormat>
               {t('lab.sm.compare.bob.get1')}
             </SimpleFormat>
-            <SimpleFormat className="finished">
-            {t('lab.sm.compare.bob.send2get3')}
-          </SimpleFormat>
-          <SimpleFormat>
-          {t('lab.sm.compare.bob.send4')}
-        </SimpleFormat>
-        <LinkButton
-        children={t('lab.sm.compare.download')}
-        onClick={ this.handleDownload }
-        />
-        <LinkButton
-        children={t('lab.sm.compare.show')}
-        onClick={ this.onClickNext }
-        />
-      </div>
-        );
+          </li>
+        ));
+        dd.push((
+          <li key="b23" className={({
+            inquiry: 'current',
+            done: 'finished',
+          })[step]}>
+            <SimpleFormat>
+              {t('lab.sm.compare.bob.send2get3')}
+            </SimpleFormat>
+          </li>
+        ));
+        dd.push((
+          <li key="b4" className={({
+            done: 'current',
+          })[step]}>
+            <SimpleFormat>
+              {t('lab.sm.compare.bob.send4')}
+            </SimpleFormat>
+          </li>
+        ));
+      }
+      d.push((
+        <ol key="steps" className="steps">
+          {dd}
+        </ol>
+      ));
+    }
+    if (nextStep) {
+      d.push((
+        <Line key="prog" percent={1 + micros / answers.length * 99} />
+      ));
+    } else {
+      if (output || step === 'done' && role === 'bob') {
+        d.push((
+          <LinkButton
+            key="download"
+            children={t('lab.sm.compare.download')}
+            onClick={ this.handleDownload }
+          />
+        ));
+      }
+      if (step && step !== 'done') {
+        d.push((
+          <input key="upload" type="file" onChange={this.handleUpload} />
+        ));
       }
     }
+    return (
+      <div>
+        {d}
+      </div>
+    );
   }
-  const CompareForm = withTranslation()(connect((state: IRootState) => ({
-    currentAnswers: state.answers,
-  }), {
-    startCompare: createStartCompareAction,
-  })(CompareFormUW));
+}
 
-  interface ICompareProps {
-    readonly comparing: null | {
-      o: IAnswersState,
-      b: IAnswersState,
-    };
-    readonly currentAnswers: IAnswersState;
-    readonly clearCompare: typeof createClearCompareAction;
-  }
-  class CompareUW extends React.PureComponent<ICompareProps> {
-    public render() {
-      const t = this.props.t;
-      return (
-        <div className='content compare'>
-          <Card>
-            <h1>{ t('lab.sm.compare.title') }</h1>
-            <SimpleFormat>{ t('lab.sm.compare.desc') }</SimpleFormat>
-            <CompareForm/>
-          </Card>
-          { this.props.comparing !== null && <Card>
-            <h1>{ t('lab.sm.compare.table.title') }</h1>
-            <LinkButton
+const CompareForm = withTranslation()(connect((state: IRootState) => ({
+  currentAnswers: state.answers,
+  resultAnswers: _get(state, ['compare', 'result']),
+  role: _get(state, ['compare', 'role']),
+  step: _get(state, ['compare', 'step']),
+  crypto: _get(state, ['compare', 'crypto']),
+  output: _get(state, ['compare', 'output']),
+}), {
+  initCompare: createInitCompareAction,
+  stepCompare: createStepCompareAction,
+  finishCompare: createFinishCompareAction,
+})(CompareFormUW));
+
+interface ICompareProps {
+  readonly currentAnswers: IAnswersState;
+  readonly resultAnswers: IAnswersState;
+  readonly reversed: boolean;
+  readonly formKey: any;
+  readonly clearCompare: typeof createClearCompareAction;
+}
+class CompareUW extends React.PureComponent<ICompareProps> {
+  public render() {
+    const t = this.props.t;
+    return (
+      <div className='content compare'>
+        <Card>
+          <h1>{ t('lab.sm.compare.title') }</h1>
+          <SimpleFormat>{ t('lab.sm.compare.desc') }</SimpleFormat>
+          <LinkButton
             children={t('lab.sm.compare.table.clear')}
             onClick={ this.props.clearCompare }
-            />
+          />
+          <CompareForm key={this.props.formKey} />
+        </Card>
+        { this.props.resultAnswers && (
+          <Card>
+            <h1>{ t('lab.sm.compare.table.title') }</h1>
             <ComparisonTable
-            basic
-            my={ this.props.currentAnswers[0] }
-            partner={ this.props.comparing.b }
+              my={ this.props.currentAnswers }
+              partner={ this.props.resultAnswers }
+              reversed={ this.props.reversed }
             />
-            <ComparisonTable
-            my={ this.props.currentAnswers }
-            partner={ this.props.comparing.o }
-            reversed={ this.props.comparing.reversed }
-            />
-        </Card> }
+          </Card>
+        )}
       </div>
-      );
-    }
+    );
   }
-  export const Compare = withTranslation()(connect((state: IRootState) => ({
-    currentAnswers: state.answers,
-    comparing: state.compare.comparing,
-  }), {
-    clearCompare: createClearCompareAction,
-  })(CompareUW));
+}
+export const Compare = withTranslation()(connect((state: IRootState) => ({
+  currentAnswers: state.answers,
+  resultAnswers: _get(state, ['compare', 'result']),
+  reversed: _get(state, ['compare', 'role']) === 'alice',
+  formKey: [_get(state, ['compare', 'step']), _get(state, ['compare', 'crypto'])],
+}), {
+  clearCompare: createClearCompareAction,
+})(CompareUW));

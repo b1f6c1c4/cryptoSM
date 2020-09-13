@@ -80,9 +80,18 @@
     p.warning {
       color: red;
     }
-    p.finished {
-      text-decoration: line-through;
-      color: darkgray;
+    ol.steps {
+      li {
+        display: none;
+      }
+      li.current {
+        display: list-item;
+      }
+      li.finished {
+        display: list-item;
+        text-decoration: line-through;
+        color: darkgray;
+      }
     }
     table {
       width: 100%;

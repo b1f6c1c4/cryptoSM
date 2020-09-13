@@ -16,7 +16,7 @@ const theEncodedComparison = window.localStorage.getItem('encodedComparison');
 
 const init = {};
 if (theEncodedAnswers) init.answers = decode(theEncodedAnswers as string);
-if (theEncodedComparison) init.comparison = JSON.parse(theEncodedComparison);
+if (theEncodedComparison) init.compare = JSON.parse(theEncodedComparison);
 
 class App extends React.Component {
   public shouldComponentUpdate() {
@@ -28,10 +28,10 @@ class App extends React.Component {
     ((window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose)(
       applyMiddleware(store => next => action => {
         const previousAnswers = (store.getState() as IRootState).answers;
-        const previousComparison = (store.getState() as IRootState).comparison;
+        const previousComparison = (store.getState() as IRootState).compare;
         const result = next(action);
         const currentAnswers = (store.getState() as IRootState).answers;
-        const currentComparison = (store.getState() as IRootState).comparison;
+        const currentComparison = (store.getState() as IRootState).compare;
         if (currentAnswers !== previousAnswers) {
           window.localStorage.setItem(
             'encodedAnswers',
