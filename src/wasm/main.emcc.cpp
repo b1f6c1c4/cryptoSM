@@ -134,9 +134,25 @@ private:
 	simple_min_bob<M> _bob;
 };
 
+template <size_t M>
+EMSCRIPTEN_KEEPALIVE
+constexpr size_t alice_size()
+{
+	return sizeof(alice_t<M>);
+}
+
+template <size_t M>
+EMSCRIPTEN_KEEPALIVE
+constexpr size_t bob_size()
+{
+	return sizeof(bob_t<M>);
+}
+
 #define MAKE(M) \
 	template class alice_t<M>; \
 	template class bob_t<M>; \
+	template size_t alice_size<M>(); \
+	template size_t bob_size<M>(); \
 	template size_t garble_size<M>(); \
 	template size_t inquiry_size<M>(); \
 	template size_t receive_size<M>();

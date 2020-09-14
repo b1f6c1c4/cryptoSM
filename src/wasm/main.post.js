@@ -48,6 +48,12 @@ Module.onRuntimeInitialized = function () {
     var obj;
 
     // template <size_t M>
+    // constexpr size_t alice_size<M>()
+    var alice_size = Module.ccall('_Z10alice_sizeILm' + m + 'EEmv', 'number', []);
+    // template <size_t M>
+    // constexpr size_t bob_size<M>()
+    var bob_size = Module.ccall('_Z8bob_sizeILm' + m + 'EEmv', 'number', []);
+    // template <size_t M>
     // size_t garble_size<M>()
     var garble_size = Module.ccall('_Z11garble_sizeILm' + m + 'EEmv', 'number', []);
     // template <size_t M>
@@ -92,6 +98,16 @@ Module.onRuntimeInitialized = function () {
       Module.ccall('_ZN7alice_tILm' + m + 'EE6removeEPS0_', 'void', ['number'], [this.self]);
     };
 
+    Alice.prototype.serialize = function () {
+      return this.self;
+    };
+
+    Alice.deserialize = function (v) {
+      var res = Object.create(Alice.prototype);
+      res.self = v;
+      return res;
+    };
+
     function Bob(b) {
       // template <size_t M>
       // auto bob_t<M>::create(size_t)
@@ -125,6 +141,16 @@ Module.onRuntimeInitialized = function () {
       // template <size_t M>
       // void bob_t<M>::remove(bob_t *)
       Module.ccall('_ZN5bob_tILm' + m + 'EE6removeEPS0_', 'void', ['number'], [this.self]);
+    };
+
+    Bob.prototype.serialize = function () {
+      return this.self;
+    };
+
+    Bob.deserialize = function (v) {
+      var res = Object.create(Bob.prototype);
+      res.self = v;
+      return res;
     };
 
     obj = {};

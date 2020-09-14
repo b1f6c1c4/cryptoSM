@@ -31,7 +31,7 @@ interface IQuestionBase {
    */
   readonly hardcoreness: HardcorenessMetrics;
   /**
-   * Whether the question is specific to both role in the play.
+   * Whether the question is specific to the role in the play.
    */
   readonly bianswer: boolean;
   /**
@@ -55,10 +55,6 @@ interface IQuestionBase {
    * Using 'S:0.3' will cause the result only limiting this question's S side.
    */
   readonly dependencies?: { [query: string]: Array<number | null> };
-  /**
-   * Whether this question is uncomparable.
-   */
-  readonly uncomparable?: true;
 }
 
 export interface IMultipleChoiceQuestion extends IQuestionBase {

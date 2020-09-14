@@ -7,7 +7,7 @@ import { withTranslation, useTranslation } from 'react-i18next';
 import EditIcon from '@material-ui/icons/Edit';
 import CompareIcon from '@material-ui/icons/Compare';
 import LanguageIcon from '@material-ui/icons/Language';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import RestoreIcon from '@material-ui/icons/Restore';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import InfoIcon from '@material-ui/icons/Info';
 import { IRootState } from '../RootState';
@@ -42,11 +42,11 @@ class ButtonPanelUW extends React.PureComponent<IButtonPanelProps> {
   public onClickLanguage = () => {
     this.props.setContent(ContentType.LANGUAGE);
   }
-  public onClickImport = () => {
-    this.props.setContent(ContentType.IMPORT);
+  public onClickReset = () => {
+    this.props.setContent(ContentType.RESET);
   }
-  public onClickExport = () => {
-    this.props.setContent(ContentType.EXPORT);
+  public onClickBackup = () => {
+    this.props.setContent(ContentType.BACKUP);
   }
   public onClickAbout = () => {
     this.props.setContent(ContentType.ABOUT);
@@ -77,16 +77,16 @@ class ButtonPanelUW extends React.PureComponent<IButtonPanelProps> {
           <LanguageIcon />
         </Button>
         <Button
-          class='import'
-          text={t('lab.sm.landing.import')}
-          onClick={ this.onClickImport }
+          class='reset'
+          text={t('lab.sm.landing.reset')}
+          onClick={ this.onClickReset }
         >
-          <CloudUploadIcon />
+          <RestoreIcon />
         </Button>
         <Button
-          class='export'
-          text={t('lab.sm.landing.export')}
-          onClick={ this.onClickExport }
+          class='backup'
+          text={t('lab.sm.landing.backup')}
+          onClick={ this.onClickBackup }
         >
           <CloudDownloadIcon />
         </Button>

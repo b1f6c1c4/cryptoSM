@@ -9,21 +9,21 @@ import { withTranslation } from 'react-i18next';
 import { decode } from '../persistence';
 import { IAnswersState } from '../reducers/answers';
 
-interface IImporterState {
+interface IRestorerState {
   readonly value: string;
   readonly submitText: string;
   readonly hint: string | null;
   readonly hintColor: string;
 }
-interface IImporterProps {
+interface IRestorerProps {
   readonly replaceAnswers: typeof createReplaceAnswersAction;
 }
-class ImporterUW extends React.PureComponent<IImporterProps, IImporterState> {
-  public constructor(props: IImporterProps) {
+class RestorerUW extends React.PureComponent<IRestorerProps, IRestorerState> {
+  public constructor(props: IRestorerProps) {
     super(props);
     this.state = {
       value: '',
-      submitText: 'lab.sm.import.import',
+      submitText: 'lab.sm.restore.restore',
       hint: null,
       hintColor: 'black',
     };
@@ -34,7 +34,7 @@ class ImporterUW extends React.PureComponent<IImporterProps, IImporterState> {
   private changeBackTimer: number | null = null;
   private changeBack = () => {
     this.setState({
-      submitText: 'lab.sm.import.import',
+      submitText: 'lab.sm.restore.restore',
     });
     if (this.changeBackTimer !== null) {
       clearTimeout(this.changeBackTimer);
@@ -45,7 +45,7 @@ class ImporterUW extends React.PureComponent<IImporterProps, IImporterState> {
     event.preventDefault();
     if (this.changeBackTimer === null) {
       this.setState({
-        submitText: 'lab.sm.import.confirm',
+        submitText: 'lab.sm.restore.confirm',
         hint: null,
       });
       this.changeBackTimer = window.setTimeout(this.changeBack, 2000);
@@ -59,12 +59,12 @@ class ImporterUW extends React.PureComponent<IImporterProps, IImporterState> {
       }
       if (result === null) {
         this.setState({
-          hint: 'lab.sm.import.failed',
+          hint: 'lab.sm.restore.failed',
           hintColor: 'red',
         });
       } else {
         this.setState({
-          hint: 'lab.sm.import.successful',
+          hint: 'lab.sm.restore.successful',
           hintColor: 'green',
         });
         this.props.replaceAnswers(result);
@@ -81,7 +81,7 @@ class ImporterUW extends React.PureComponent<IImporterProps, IImporterState> {
     return (
       <div>
         <InputField
-          label={t('lab.sm.import.label')}
+          label={t('lab.sm.restore.label')}
           onChange={ this.onChange }
           value={ this.state.value }
         />
@@ -96,23 +96,51 @@ class ImporterUW extends React.PureComponent<IImporterProps, IImporterState> {
   }
 }
 
-const Importer = withTranslation()(connect(null, {
+const Restorer = withTranslation()(connect(null, {
   replaceAnswers: createReplaceAnswersAction,
-})(ImporterUW));
+})(RestorerUW));
 
-class ImportUW extends React.PureComponent {
+class BackupUW extends React.PureComponent {
+  private codeRef: HTMLElement;
+  private updateRef = (ref: HTMLElement | null) => {
+    if (ref !== null) {
+      this.codeRef = ref;
+    }
+  }
+  private clicked: boolean = false;
+  private onClick = () => {
+    if (this.clicked) {
+      return;
+    }
+    const selection = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(this.codeRef);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    this.clicked = true;
+  }
   public render() {
     const t = this.props.t;
     return (
-      <div className='content import'>
+      <div className='content backup'>
         <Card>
-          <h1>{ t('lab.sm.import.title') }</h1>
-          <SimpleFormat>{ t('lab.sm.import.desc') }</SimpleFormat>
-          <Importer/>
+          <h1>{ t('lab.sm.backup.title') }</h1>
+          <SimpleFormat>{ t('lab.sm.backup.desc') }</SimpleFormat>
+          <code
+            ref={ this.updateRef }
+            onClick={ this.onClick }
+          >
+            { window.localStorage.getItem('encodedAnswers') }
+          </code>
+        </Card>
+        <Card>
+          <h1>{ t('lab.sm.restore.title') }</h1>
+          <SimpleFormat>{ t('lab.sm.restore.desc') }</SimpleFormat>
+          <Restorer/>
         </Card>
       </div>
     );
   }
 }
 
-export const Import = withTranslation()(ImportUW);
+export const Backup = withTranslation()(BackupUW);
