@@ -3,10 +3,14 @@ import {
   ACTION_STEP_COMPARE,
   ACTION_FINISH_COMPARE,
   ACTION_CLEAR_COMPARE,
+  ACTION_REPLACE_ANSWERS,
+  ACTION_SET_ANSWER,
   IActionInitCompare,
   IActionStepCompare,
   IActionFinishCompare,
   IActionClearCompare,
+  IActionReplaceAnswers,
+  IActionSetAnswer,
 } from '../actions/compare';
 import update from 'immutability-helper';
 import { IAnswersState } from './answers';
@@ -26,7 +30,7 @@ export function compare(
     output: null,
     result: null,
   },
-  action: IActionInitCompare | IActionStepCompare | IActionFinishCompare | IActionClearCompare,
+  action: IActionInitCompare | IActionStepCompare | IActionFinishCompare | IActionClearCompare | IActionReplaceAnswers | IActionSetAnswer,
 ) {
   switch (action.type) {
     case ACTION_INIT_COMPARE:
@@ -58,6 +62,8 @@ export function compare(
         },
       });
     case ACTION_CLEAR_COMPARE:
+    case ACTION_REPLACE_ANSWERS:
+    case ACTION_SET_ANSWER:
       return update(state, {
         $set: {
           role: null,
