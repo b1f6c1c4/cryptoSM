@@ -2,7 +2,6 @@
 
 #include <tomcrypt.h>
 #include <algorithm>
-#include <vector>
 #include "util.hpp"
 
 inline constexpr auto aes_cipher_size(size_t input)
@@ -13,7 +12,7 @@ inline constexpr auto aes_cipher_size(size_t input)
 	return input;
 }
 
-template <size_t Na, size_t Nb, size_t K = 128 / 8>
+template <size_t Ma, size_t Mb, size_t Mc, size_t K = 128 / 8>
 class garbled_table
 {
 	static constexpr const size_t C = aes_cipher_size(K);
@@ -21,32 +20,14 @@ class garbled_table
 	typedef std::array<byte_t, C> clabel_t;
 
 public:
-	template <typename ContainerA, typename ContainerB>
-	garbled_table(const ContainerA &mita, const ContainerB &mitb, size_t mc) : _sz{1}
-	{
-		for (auto &&[ls, m] : zip(_la, mita))
-			ls.resize(m);
-		for (auto &&[ls, m] : zip(_lb, mitb))
-			ls.resize(m);
-		_lc.resize(mc);
-
-		for (auto m : mita)
-			_sz *= m;
-		for (auto m : mitb)
-			_sz *= m;
-		_t.resize(_sz);
-	}
-
 	template <typename Func>
 	void garble(Func fun, prng_state &prng)
 	{
 		LOG("Garble started");
-		for (decltype(auto) ls : _la)
-			for (decltype(auto) l : ls)
-				random_fill(l, prng);
-		for (decltype(auto) ls : _lb)
-			for (decltype(auto) l : ls)
-				random_fill(l, prng);
+		for (decltype(auto) l : _la)
+      random_fill(l, prng);
+		for (decltype(auto) l : _lb)
+      random_fill(l, prng);
 		for (decltype(auto) l : _lc)
 			random_fill(l, prng);
 
@@ -60,8 +41,8 @@ public:
 				std::swap(ids[rs[i] % (_sz - i)], ids[_sz - i - 1]);
 		}
 
-		std::array<size_t, Na> a;
-		std::array<size_t, Nb> b;
+		size_t a;
+		size_t b;
 		for (auto &&[target, abid] : zip(_t, ids))
 		{
 			LOG("Garbling entry #", abid);
@@ -103,13 +84,13 @@ public:
 
 	auto dump_size() const
 	{
-		return Na * K + _lc.size() * K + _sz * C;
+		return 1 * K + Mc * K + _sz * C;
 	}
 
 	template <typename Iter, typename Func>
 	auto dump(Iter it, Func fun) const
 	{
-		for (size_t i = 0; i < Na; i++)
+		for (size_t i = 0; i < 1; i++)
 		{
 			decltype(auto) a = fun(i);
 			copy(_la[i][a], it);
@@ -125,16 +106,16 @@ public:
 	}
 
 	template <typename Iter, typename Func>
-	static size_t evaluate(size_t sz, size_t mc, Iter it, Func fun)
+	static size_t evaluate(Iter it, Func fun)
 	{
 		LOG("Evalutate started");
 		hash_state hash;
 		sha256_init(&hash);
 
-		sha256_process(&hash, get_ptr(it), Na * K);
-		it += Na * K;
+		sha256_process(&hash, get_ptr(it), 1 * K);
+		it += 1 * K;
 
-		for (size_t i = 0; i < Nb; i++)
+		for (size_t i = 0; i < 1; i++)
 		{
 			decltype(auto) l = fun(i);
 			sha256_process(&hash, get_ptr(l), K);
@@ -150,13 +131,13 @@ public:
 
 		clabel_t target;
 
-		auto itx = it + mc * K;
-		for (size_t i = 0; i < sz; i++)
+		auto itx = it + Mc * K;
+		for (size_t i = 0; i < _sz; i++)
 		{
 			LOG("Evaluating entry #", i);
 			RUN(ctr_setiv(iv, 128 / 8, &ctr));
 			RUN(ctr_decrypt(get_ptr(itx + i * C), get_ptr(target), C, &ctr));
-			for (size_t i = 0; i < mc; i++)
+			for (size_t i = 0; i < Mc; i++)
 				if (std::equal(it + i * K, it + i * K + K, get_ptr(target)))
 					return i;
 		}
@@ -165,9 +146,9 @@ public:
 	}
 
 private:
-	size_t _sz;
-	std::array<std::vector<label_t>, Na> _la;
-	std::array<std::vector<label_t>, Nb> _lb;
-	std::vector<label_t> _lc;
-	std::vector<clabel_t> _t;
+	constexpr size_t _sz = Ma * Mb;
+	std::array<label_t, Ma> _la;
+	std::array<label_t, Mb> _lb;
+	std::array<label_t, Mc> _lc;
+	std::array<clabel_t, _sz> _t;
 };

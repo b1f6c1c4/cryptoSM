@@ -3,7 +3,6 @@
 #include <tomcrypt.h>
 #include <exception>
 #include <algorithm>
-#include <vector>
 #include "util.hpp"
 
 template <typename Iter>
@@ -21,13 +20,12 @@ inline auto mp_dump(void *v, Container &c)
 	return mp_dump(v, get_ptr(c), get_sz(c));
 }
 
-template <size_t KN = 1024 / 8>
+template <size_t M, size_t KN = 1024 / 8>
 class oblivious_transfer_sender
 {
 	typedef std::array<byte_t, KN> msg_t;
 
 public:
-	oblivious_transfer_sender(size_t m) { _x.resize(m); }
 	oblivious_transfer_sender(const oblivious_transfer_sender &) = delete;
 	oblivious_transfer_sender(oblivious_transfer_sender &&other)
 		: _rsa(std::move(other._rsa)), _x(std::move(other._x))
@@ -61,7 +59,7 @@ public:
 		RUN(mp_read_unsigned_bin(tmp1, get_ptrF(it), KN));
 		RUN(mp_add(tmp1, _rsa.N, v));
 
-		for (size_t i = 0; i < _x.size(); i++)
+		for (size_t i = 0; i < M; i++)
 		{
 			decltype(auto) x = _x[i];
 
@@ -110,7 +108,7 @@ public:
 
 private:
 	rsa_key _rsa;
-	std::vector<msg_t> _x;
+	std::array<msg_t> _x;
 };
 
 
