@@ -8,8 +8,6 @@ import { reducers } from './reducers/index';
 import { IRootState } from './RootState';
 import './i18n';
 import 'typeface-poiret-one';
-import 'roboto-fontface';
-import 'notosans-fontface';
 
 const theEncodedAnswers = window.localStorage.getItem('encodedAnswers');
 const theEncodedComparison = window.localStorage.getItem('encodedComparison');
