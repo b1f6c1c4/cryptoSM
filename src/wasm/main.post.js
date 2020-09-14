@@ -99,20 +99,13 @@ Module.onRuntimeInitialized = function () {
     };
 
     Alice.prototype.serialize = function () {
-      var self = this.self;
-      return withBuffer(alice_size, function (buffOut) {
-        Module.ccall('_ZN7alice_tILm' + m + 'EE9serializeEPh', 'null', ['number', 'number'], [self, buffOut.byteOffset]);
-        return toHex(buffOut);
-      });
+      return this.self;
     };
 
-    Alice.deserialize = function (input) {
-      return withBuffer(alice_size, function (buffIn) {
-        fromHex(input, buffIn);
-        var res = Object.create(Alice.prototype);
-        res.self = Module.ccall('_ZN7alice_tILm' + m + 'EE11deserializeEPKh', 'null', ['number', 'number'], [self, buffIn.byteOffset]);
-        return res;
-      });
+    Alice.deserialize = function (v) {
+      var res = Object.create(Alice.prototype);
+      res.self = v;
+      return res;
     };
 
     function Bob(b) {
@@ -151,20 +144,13 @@ Module.onRuntimeInitialized = function () {
     };
 
     Bob.prototype.serialize = function () {
-      var self = this.self;
-      return withBuffer(bob_size, function (buffOut) {
-        Module.ccall('_ZN5bob_tILm' + m + 'EE9serializeEPh', 'null', ['number', 'number'], [self, buffOut.byteOffset]);
-        return toHex(buffOut);
-      });
+      return this.self;
     };
 
-    Bob.deserialize = function (input) {
-      return withBuffer(bob_size, function (buffIn) {
-        fromHex(input, buffIn);
-        var res = Object.create(Bob.prototype);
-        res.self = Module.ccall('_ZN5bob_tILm' + m + 'EE11deserializeEPKh', 'null', ['number', 'number'], [self, buffIn.byteOffset]);
-        return res;
-      });
+    Bob.deserialize = function (v) {
+      var res = Object.create(Bob.prototype);
+      res.self = v;
+      return res;
     };
 
     obj = {};

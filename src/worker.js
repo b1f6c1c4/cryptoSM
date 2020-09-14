@@ -1,29 +1,46 @@
 let loader;
-const loadModule = () => {
+const loadModule = (serializedState) => {
   if (loader) return loader;
-  if (process.env.NODE_ENV === 'production') {
-    self.Module = {
-      locateFile: (url, base) => `${base}bin/${url}`,
-    };
-    importScripts('bin/garble.js');
+  const patchWasm = (fun) => {
+    self.Module.wasmMemory = new WebAssembly.Memory({
+      initial: 10,
+      maximum: 10,
+      shared: true,
+    });
+    if (serializedState) {
+      const len = self.Module.wasmMemory.buffer.byteLength;
+      new Uint8Array(self.Module.wasmMemory.buffer, 0, len).set(
+        new Uint8Array(serializedState),
+      );
+    }
+    fun();
     const old = self.Module.onRuntimeInitialized;
+    self.Module.serialize = () => {
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('mem length:', self.Module.wasmMemory.buffer.byteLength);
+      }
+      return self.Module.wasmMemory.buffer;
+    };
     return loader = new Promise((resolve) => {
       self.Module.onRuntimeInitialized = function () {
         old.apply(this, arguments);
         resolve(this);
       };
     });
+  };
+  if (process.env.NODE_ENV === 'production') {
+    self.Module = {
+      locateFile: (url, base) => `${base}bin/${url}`,
+    };
+    return patchWasm(() => {
+      importScripts('bin/garble.js');
+    });
   } else if (process.env.NODE_ENV === 'preview') {
     self.Module = {
       locateFile: (url, base) => `http://localhost:1235/${url}`,
     };
-    require('../bin/garble-patch.js');
-    const old = self.Module.onRuntimeInitialized;
-    return loader = new Promise((resolve) => {
-      self.Module.onRuntimeInitialized = function () {
-        old.apply(this, arguments);
-        resolve(this);
-      };
+    return patchWasm(() => {
+      require('../bin/garble-patch.js');
     });
   } else {
     class Alice4 {
@@ -48,6 +65,7 @@ const loadModule = () => {
       receiveSize4: 5,
       Alice4,
       Bob4,
+      serialize: () => null,
     });
   }
 };
@@ -59,7 +77,7 @@ onmessage = function({ data }) {
     console.log('Worker message:', data);
   }
   const t0 = +new Date();
-  loadModule().then((Module) => {
+  loadModule(data.ss && data.ss.mem).then((Module) => {
     let res;
     switch (data.cmd) {
       case 'alice-garble':
@@ -89,14 +107,17 @@ onmessage = function({ data }) {
         insts = [];
         break;
       case 'serialize':
-        res = JSON.stringify(insts.map((x) => x.serialize()));
+        res = {
+          mem: Module.serialize(),
+          insts: insts.map((x) => x.serialize()),
+        };
         break;
       case 'alice-deserialize':
-        insts = JSON.parse(data.str).map((s) => Module.Alice4.deserialize(s));
+        insts = data.ss.insts.map((s) => Module.Alice4.deserialize(s));
         res = null;
         break;
       case 'bob-deserialize':
-        insts = JSON.parse(data.str).map((s) => Module.Bob4.deserialize(s));
+        insts = data.ss.insts.map((s) => Module.Bob4.deserialize(s));
         res = null;
         break;
     }

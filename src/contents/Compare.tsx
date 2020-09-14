@@ -57,9 +57,9 @@ class CompareFormUW extends React.PureComponent<
     worker.onmessage = ({ data }) => { this.doneStuff(data); };
     if (crypto) {
       if (role === 'alice') {
-        worker.postMessage({ cmd: 'alice-deserialize', str: crypto });
+        worker.postMessage({ cmd: 'alice-deserialize', ss: crypto });
       } else {
-        worker.postMessage({ cmd: 'bob-deserialize', str: crypto });
+        worker.postMessage({ cmd: 'bob-deserialize', ss: crypto });
       }
     }
     if (role !== null) {

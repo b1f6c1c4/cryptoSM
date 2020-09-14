@@ -1,3 +1,4 @@
+CXX=em++ -s USE_PTHREADS=1
 CFLAGS=-O3 -Isrc/libtommath/headers -Isrc/libtomcrypt/headers -DLTC_SOURCE
 CXXFLAGS=$(CFLAGS)
 
@@ -25,13 +26,15 @@ obj/emcc/lib.a:
 
 obj/emcc/main.o: src/wasm/main.emcc.cpp $(HFILES) $(HPPFILES)
 	mkdir -p $(shell dirname $@)
-	em++ -c --std=c++17 -o $@ $(CXXFLAGS) $<
+	$(CXX) -c --std=c++17 -o $@ $(CXXFLAGS) $<
 
 bin/garble.js: src/wasm/main.post.js obj/emcc/main.o obj/emcc/lib.a
 	mkdir -p $(shell dirname $@)
-	em++ -o $@ --post-js $^ \
-		-s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall"]' \
-		-s DEMANGLE_SUPPORT=1
+	$(CXX) -o $@ --post-js $^ \
+		-s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall","getValue"]' \
+		-s DEMANGLE_SUPPORT=1 \
+		-s TOTAL_STACK=16KB \
+		-s TOTAL_MEMORY=640KB
 
 bin/garble-patch.js: bin/garble.js
 	echo 'var Module = self.Module;' > bin/garble-patch.js

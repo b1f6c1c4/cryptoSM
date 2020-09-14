@@ -24,9 +24,6 @@ export function smPrepare(input, reversed) {
       res.push(...ans);
     });
   });
-  if (process.env.NODE_ENV !== 'production') {
-    console.log(res);
-  }
   const resv = res.map((v) => (v === undefined ? 0 : 3 - v));
   return resv;
 }

@@ -3,6 +3,9 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
+import { deflate, inflate } from 'pako';
+import _get from 'lodash/get';
+import _set from 'lodash/set';
 import { decode, encode } from './persistence';
 import { reducers } from './reducers/index';
 import { IRootState } from './RootState';
@@ -11,10 +14,18 @@ import 'typeface-poiret-one';
 
 const theEncodedAnswers = window.localStorage.getItem('encodedAnswers');
 const theEncodedComparison = window.localStorage.getItem('encodedComparison');
+const theEncodedCrypto = window.localStorage.getItem('encodedCrypto');
 
 const init = {};
-if (theEncodedAnswers) init.answers = decode(theEncodedAnswers as string);
-if (theEncodedComparison) init.compare = JSON.parse(theEncodedComparison);
+if (theEncodedAnswers) {
+  init.answers = decode(theEncodedAnswers as string);
+  if (theEncodedComparison) {
+    init.compare = JSON.parse(theEncodedComparison);
+    if (init.compare.crypto && theEncodedCrypto) {
+      init.compare.crypto.mem = inflate(theEncodedCrypto);
+    }
+  }
+}
 
 class App extends React.Component {
   public shouldComponentUpdate() {
@@ -37,6 +48,15 @@ class App extends React.Component {
           );
         }
         if (currentComparison !== previousComparison) {
+          const mem = _get(currentComparison, ['crypto', 'mem']);
+          if (mem) {
+            window.localStorage.setItem(
+              'encodedCrypto',
+              deflate(mem, { to: 'string' }),
+            );
+          } else {
+            window.localStorage.removeItem('encodedCrypto');
+          }
           window.localStorage.setItem(
             'encodedComparison',
             JSON.stringify(currentComparison),

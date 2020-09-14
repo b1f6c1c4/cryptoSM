@@ -100,22 +100,6 @@ public:
 		_alice.receive(in, out);
 	}
 
-	EMSCRIPTEN_KEEPALIVE
-	void serialize(unsigned char *out)
-	{
-		for (size_t i{ 0 }; i < sizeof(alice_t); i++)
-			out[i] = reinterpret_cast<unsigned char *>(this)[i];
-	}
-
-	EMSCRIPTEN_KEEPALIVE
-	static auto deserialize(const unsigned char *in)
-	{
-		auto ptr = reinterpret_cast<unsigned char *>(malloc(sizeof(alice_t)));
-		for (size_t i{ 0 }; i < sizeof(alice_t); i++)
-			ptr[i] = in[i];
-		return reinterpret_cast<alice_t *>(ptr);
-	}
-
 private:
 	simple_min_alice<M> _alice;
 };
@@ -144,22 +128,6 @@ public:
 	size_t evaluate(const unsigned char *in)
 	{
 		return _bob.evaluate(in);
-	}
-
-	EMSCRIPTEN_KEEPALIVE
-	void serialize(unsigned char *out)
-	{
-		for (size_t i{ 0 }; i < sizeof(bob_t); i++)
-			out[i] = reinterpret_cast<unsigned char *>(this)[i];
-	}
-
-	EMSCRIPTEN_KEEPALIVE
-	static auto deserialize(const unsigned char *in)
-	{
-		auto ptr = reinterpret_cast<unsigned char *>(malloc(sizeof(bob_t)));
-		for (size_t i{ 0 }; i < sizeof(bob_t); i++)
-			ptr[i] = in[i];
-		return reinterpret_cast<bob_t *>(ptr);
 	}
 
 private:
