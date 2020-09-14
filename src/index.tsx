@@ -22,7 +22,8 @@ if (theEncodedAnswers) {
   if (theEncodedComparison) {
     init.compare = JSON.parse(theEncodedComparison);
     if (init.compare.crypto && theEncodedCrypto) {
-      init.compare.crypto.mem = inflate(theEncodedCrypto);
+      // TODO
+      // init.compare.crypto.mem = inflate(theEncodedCrypto);
     }
   }
 }
@@ -52,7 +53,7 @@ class App extends React.Component {
           if (mem) {
             window.localStorage.setItem(
               'encodedCrypto',
-              deflate(mem, { to: 'string' }),
+              // deflate(mem, { to: 'string' }),
             );
           } else {
             window.localStorage.removeItem('encodedCrypto');

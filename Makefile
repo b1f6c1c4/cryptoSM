@@ -1,5 +1,5 @@
-CXX=em++ -s USE_PTHREADS=1
-CFLAGS=-O3 -Isrc/libtommath/headers -Isrc/libtomcrypt/headers -DLTC_SOURCE
+CXX=em++ -s ASSERTIONS=1 -s SAFE_HEAP=1 -s STACK_OVERFLOW_CHECK=1
+CFLAGS=-Isrc/libtommath/headers -Isrc/libtomcrypt/headers -DLTC_SOURCE
 CXXFLAGS=$(CFLAGS)
 
 CFILES=$(shell find src/ -type f -name '*.c')
@@ -31,14 +31,13 @@ obj/emcc/main.o: src/wasm/main.emcc.cpp $(HFILES) $(HPPFILES)
 bin/garble.js: src/wasm/main.post.js obj/emcc/main.o obj/emcc/lib.a
 	mkdir -p $(shell dirname $@)
 	$(CXX) -o $@ --post-js $^ \
-		-s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall","getValue"]' \
-		-s DEMANGLE_SUPPORT=1 \
-		-s TOTAL_STACK=16KB \
-		-s TOTAL_MEMORY=640KB
+		-s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall"]' \
+		-s DEMANGLE_SUPPORT=1
 
 bin/garble-patch.js: bin/garble.js
 	echo 'var Module = self.Module;' > bin/garble-patch.js
 	cat $^ >> $@
+	sed -i '/require.*perf_hooks/d' $@
 
 clean:
 	rm -rf bin/ obj/

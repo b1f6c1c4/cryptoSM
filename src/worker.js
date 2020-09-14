@@ -3,9 +3,8 @@ const loadModule = (serializedState) => {
   if (loader) return loader;
   const patchWasm = (fun) => {
     self.Module.wasmMemory = new WebAssembly.Memory({
-      initial: 10,
-      maximum: 10,
-      shared: true,
+      initial: 256,
+      maximum: 256,
     });
     if (serializedState) {
       const len = self.Module.wasmMemory.buffer.byteLength;
