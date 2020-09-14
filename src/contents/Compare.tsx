@@ -373,7 +373,7 @@ class CompareUW extends React.PureComponent<ICompareProps> {
 export const Compare = withTranslation()(connect((state: IRootState) => ({
   currentAnswers: state.answers,
   resultAnswers: _get(state, ['compare', 'result']),
-  reversed: _get(state, ['compare', 'role']) === 'alice',
+  reversed: _get(state, ['compare', 'role']) === 'bob',
   formKey: [_get(state, ['compare', 'step']), _get(state, ['compare', 'crypto'])],
 }), {
   clearCompare: createClearCompareAction,
