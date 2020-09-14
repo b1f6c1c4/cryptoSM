@@ -3,14 +3,11 @@ const loadModule = (serializedState) => {
   if (loader) return loader;
   const patchWasm = (fun) => {
     self.Module.wasmMemory = new WebAssembly.Memory({
-      initial: 256,
-      maximum: 256,
+      initial: 10,
+      maximum: 10,
     });
     if (serializedState) {
-      const len = self.Module.wasmMemory.buffer.byteLength;
-      new Uint8Array(self.Module.wasmMemory.buffer, 0, len).set(
-        new Uint8Array(serializedState),
-      );
+      self.Module.noInitialRun = true;
     }
     fun();
     const old = self.Module.onRuntimeInitialized;
@@ -22,6 +19,12 @@ const loadModule = (serializedState) => {
     };
     return loader = new Promise((resolve) => {
       self.Module.onRuntimeInitialized = function () {
+        if (serializedState) {
+          const len = self.Module.wasmMemory.buffer.byteLength;
+          new Uint8Array(self.Module.wasmMemory.buffer, 0, len).set(
+            new Uint8Array(serializedState),
+          );
+        }
         old.apply(this, arguments);
         resolve(this);
       };
